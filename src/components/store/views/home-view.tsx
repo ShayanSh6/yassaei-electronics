@@ -3,12 +3,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
-  Search, ChevronLeft, Package, ShoppingCart, Users, Zap, Sparkles, Flame, TrendingUp, Star,
+  Search, ChevronLeft, Package, ShoppingCart, Users, Zap, Sparkles, Flame, TrendingUp, Star, Timer, History,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "@/lib/store/api";
 import { navigate, toFa, formatToman } from "@/lib/store/router";
-import type { HomePayload } from "@/lib/store/types";
+import type { HomePayload, Product } from "@/lib/store/types";
+import { useRecentlyViewed } from "@/lib/store/cart-store";
 import { ProductCard, ProductCardSkeleton } from "../product-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,21 +30,75 @@ function HomeSkeleton() {
   );
 }
 
-function SectionHeader({ icon: Icon, title, href, accent }: { icon: typeof Flame; title: string; href?: string; accent?: string }) {
+function SectionHeader({ icon: Icon, title, href, accent, extra }: { icon: typeof Flame; title: string; href?: string; accent?: string; extra?: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
       <h2 className="flex items-center gap-2 text-lg sm:text-xl font-extrabold">
         <span className={`grid place-items-center size-9 rounded-xl ${accent ?? "bg-brand/15 text-brand"}`}>
           <Icon className="size-5" />
         </span>
         {title}
       </h2>
-      {href && (
-        <a href={href} className="flex items-center gap-1 text-xs text-brand hover:gap-2 transition-all">
-          مشاهده همه <ChevronLeft className="size-4" />
-        </a>
-      )}
+      <div className="flex items-center gap-3">
+        {extra}
+        {href && (
+          <a href={href} className="flex items-center gap-1 text-xs text-brand hover:gap-2 transition-all">
+            مشاهده همه <ChevronLeft className="size-4" />
+          </a>
+        )}
+      </div>
     </div>
+  );
+}
+
+/** Countdown to next midnight (deal window) — hydration-safe. */
+function DealCountdown() {
+  const [left, setLeft] = useState<string | null>(null);
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      const end = new Date(now);
+      end.setHours(24, 0, 0, 0);
+      const diff = Math.max(0, end.getTime() - now.getTime());
+      const h = Math.floor(diff / 3_600_000);
+      const m = Math.floor((diff % 3_600_000) / 60_000);
+      const s = Math.floor((diff % 60_000) / 1000);
+      const pad = (n: number) => String(n).padStart(2, "0");
+      setLeft(`${pad(h)}:${pad(m)}:${pad(s)}`);
+    };
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-lg bg-red-500/10 border border-red-500/30 px-2.5 py-1 text-[11px] text-red-400 font-bold"
+      dir="ltr"
+      aria-label="زمان باقی‌مانده پیشنهاد ویژه"
+    >
+      <Timer className="size-3.5" />
+      <span className="num tracking-wider">{left ?? "--:--:--"}</span>
+    </span>
+  );
+}
+
+/** Recently viewed strip (client store, renders only when history exists). */
+function RecentlyViewed() {
+  const ids = useRecentlyViewed((s) => s.ids);
+  const { data } = useQuery({
+    queryKey: ["recent", ids.join(",")],
+    queryFn: () => api.productsByIds(ids.slice(0, 4)),
+    enabled: ids.length > 0,
+    staleTime: 60_000,
+  });
+  if (ids.length === 0 || !data || data.length === 0) return null;
+  return (
+    <section className="mx-auto max-w-7xl px-4 pt-12">
+      <SectionHeader icon={History} title="بازدیدهای اخیر شما" />
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+        {data.map((p: Product) => <ProductCard key={p.id} product={p} />)}
+      </div>
+    </section>
   );
 }
 
@@ -179,7 +234,13 @@ export function HomeView() {
       {/* deals */}
       {home.deals.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 pt-12">
-          <SectionHeader icon={Flame} title="پیشنهاد شگفت‌انگیز" href="#/catalog?sort=popular" accent="bg-red-500/15 text-red-400" />
+          <SectionHeader
+            icon={Flame}
+            title="پیشنهاد شگفت‌انگیز"
+            href="#/catalog?sort=popular"
+            accent="bg-red-500/15 text-red-400"
+            extra={<DealCountdown />}
+          />
           <Carousel opts={{ direction: "rtl", align: "start" }} className="w-full">
             <CarouselContent className="-ml-3">
               {home.deals.map((p) => (
@@ -242,6 +303,9 @@ export function HomeView() {
           </div>
         </div>
       </section>
+
+      {/* recently viewed */}
+      <RecentlyViewed />
 
       {/* brands */}
       <section className="mx-auto max-w-7xl px-4 pt-12">

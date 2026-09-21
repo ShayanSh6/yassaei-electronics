@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Trash2, Minus, Plus, ShoppingCart, ArrowLeft, TicketPercent } from "lucide-react";
+import { Trash2, Minus, Plus, ShoppingCart, ArrowLeft, TicketPercent, BadgePercent } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/store/api";
@@ -45,6 +45,7 @@ export function CartView() {
 
   const items: CartValidatedItem[] = data?.items ?? [];
   const subtotal = data?.subtotal ?? 0;
+  const bulkDiscount = data?.bulkDiscount ?? 0;
   const freeShipping = subtotal >= 2_000_000;
   const shipping = freeShipping ? 0 : 120_000;
   const total = Math.max(0, subtotal - discount + shipping);
@@ -102,8 +103,21 @@ export function CartView() {
                     >
                       {item.name}
                     </button>
-                    <div className="text-[11px] text-brand font-bold num mt-1.5">
-                      {formatToman(item.price)} تومان
+                    <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                      <span className="text-[11px] text-brand font-bold num">
+                        {formatToman(item.unitPrice ?? item.price)} تومان
+                      </span>
+                      {(item.bulkPercent ?? 0) > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/15 text-emerald-400 text-[9px] font-bold px-1.5 py-0.5">
+                          <BadgePercent className="size-3" />
+                          ٪{toFa(item.bulkPercent)} عمده
+                        </span>
+                      )}
+                      {(item.bulkPercent ?? 0) > 0 && (
+                        <span className="text-[10px] text-muted-foreground line-through num">
+                          {formatToman(item.price)}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-3 shrink-0">
@@ -175,9 +189,17 @@ export function CartView() {
               <span className="text-muted-foreground">جمع کالاها</span>
               <span className="num">{formatToman(subtotal)}</span>
             </div>
+            {bulkDiscount > 0 && (
+              <div className="flex justify-between text-emerald-400">
+                <span className="flex items-center gap-1">
+                  <BadgePercent className="size-3.5" /> تخفیف خرید عمده
+                </span>
+                <span className="num">−{formatToman(bulkDiscount)}</span>
+              </div>
+            )}
             {discount > 0 && (
               <div className="flex justify-between text-emerald-400">
-                <span>تخفیف ({couponCode})</span>
+                <span>کد تخفیف ({couponCode})</span>
                 <span className="num">−{formatToman(discount)}</span>
               </div>
             )}

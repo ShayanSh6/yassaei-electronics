@@ -60,6 +60,8 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   condition: string;
+  /** Per-product wholesale tier override (null/undefined → global BULK_TIERS). */
+  bulkTiers?: BulkTier[] | null;
 }
 
 export interface Coupon {
@@ -104,6 +106,16 @@ export interface OrderItem {
   price: number;
   qty: number;
   image: string;
+  /** Effective unit price after bulk-tier discount (equals `price` when no tier applies). */
+  unitPrice?: number;
+  /** Applied bulk-tier percent (0/undefined when none). */
+  bulkPercent?: number;
+}
+
+/** Quantity-tier wholesale discount: buy `minQty`+ units of one product → `percent`% off. */
+export interface BulkTier {
+  minQty: number;
+  percent: number;
 }
 
 export interface OrderCustomer {
@@ -132,6 +144,16 @@ export interface Order {
   createdAt: string;
   userId: string | null;
   couponCode?: string | null;
+  /** Total savings from bulk quantity tiers (list-price sum − discounted sum). */
+  bulkDiscount?: number;
+  /** Audit trail of status transitions (oldest → newest); absent on pre-v6 orders. */
+  statusHistory?: OrderStatusEvent[];
+}
+
+/** One status transition entry. */
+export interface OrderStatusEvent {
+  status: OrderStatus;
+  at: string;
 }
 
 export interface Review {
@@ -141,6 +163,19 @@ export interface Review {
   userName: string;
   rating: number;
   comment: string;
+  createdAt: string;
+}
+
+/** Product Q&A: guests ask, staff answers. */
+export interface QAQuestion {
+  id: string;
+  productId: string;
+  name: string;
+  question: string;
+  answer?: string;
+  answeredAt?: string | null;
+  /** "مفید بود" votes on the answer (never negative). */
+  helpful?: number;
   createdAt: string;
 }
 
@@ -158,6 +193,7 @@ export interface Settings {
   ui?: Record<string, unknown>;
   features?: Record<string, unknown>;
   shipping?: Record<string, unknown>;
+  inventory?: Record<string, unknown>;
   plus?: Record<string, unknown>;
   orders?: Record<string, unknown>;
   seo?: Record<string, unknown>;
@@ -185,7 +221,25 @@ export interface DBState {
   sessions: Session[];
   orders: Order[];
   reviews: Review[];
+  questions: QAQuestion[];
   stats: DBStats;
+}
+
+/**
+ * Pluggable persistence driver (PostgreSQL / JSON file).
+ * The Store keeps live state in memory; the driver only moves whole DBState
+ * snapshots in and out, so route handlers never care where data lives.
+ */
+export interface DbDriver {
+  readonly name: 'postgres' | 'json';
+  /** Load the persisted state; null = empty/fresh store (caller migrates its current seed). */
+  load(): Promise<DBState | null>;
+  /** Persist the full state atomically (single transaction for PostgreSQL). */
+  save(state: DBState): Promise<void>;
+  /** Human-facing info for /api/health (counts, server version, latency…). */
+  describe(): Promise<Record<string, unknown>>;
+  /** Release connections (graceful shutdown). */
+  close(): Promise<void>;
 }
 
 /* ---------- request context / router ---------- */

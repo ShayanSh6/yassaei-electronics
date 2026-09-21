@@ -1,13 +1,34 @@
-# ── Yassaei Electronics — Frontend (Next.js) + Backend (Bun API) ──
+# ── Yassaei Electronics — PostgreSQL + Frontend (Next.js) + Backend (Bun API) ──
 # Usage:
-#   docker compose up -d --build          # start both services
+#   docker compose up -d --build          # start all three services
 #   docker compose logs -f                # follow logs
-#   docker compose down                   # stop (data persists in yassaei-data volume)
+#   docker compose down                   # stop (data persists in the volumes)
 #
+# Database  → PostgreSQL 16 (db service; data in yassaei-pgdata volume)
+#             The backend auto-creates its schema and, on first boot, migrates
+#             the bundled JSON seed (backend/data/db.json) into PostgreSQL.
+#             Set PG_DISABLED=1 to force JSON-file storage instead.
 # Frontend  → http://localhost:3000  (UI; /api/* proxied to backend)
 # Backend   → http://localhost:4000  (REST API, also reachable directly)
 
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: yassaei-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=yassaei
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-yassaei1404}
+      - POSTGRES_DB=yassaei
+    volumes:
+      - yassaei-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yassaei -d yassaei"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
   backend:
     build:
       context: .
@@ -17,10 +38,14 @@ services:
     environment:
       - PORT=4000
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Yassaei@1404}
+      - DATABASE_URL=postgres://yassaei:${POSTGRES_PASSWORD:-yassaei1404}@db:5432/yassaei
     volumes:
       - yassaei-data:/app/data
     ports:
       - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://127.0.0.1:4000/healthz || exit 1"]
       interval: 30s
@@ -45,3 +70,4 @@ services:
 
 volumes:
   yassaei-data:
+  yassaei-pgdata:

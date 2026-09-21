@@ -1,0 +1,45 @@
+{
+  "name": "فروشگاه یاسایی الکترونیک",
+  "short_name": "یاسایی",
+  "description": "قطعات الکترونیک، ابزار و لوازم جانبی — ارسال سریع از تهران",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "/#/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0d1520",
+  "theme_color": "#0d1520",
+  "categories": ["shopping", "electronics"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "فروشگاه",
+      "url": "/#/catalog",
+      "description": "مشاهدهٔ همهٔ کالاها"
+    },
+    {
+      "name": "سبد خرید",
+      "url": "/#/cart",
+      "description": "سبد خرید شما"
+    },
+    {
+      "name": "پیگیری سفارش",
+      "url": "/#/track",
+      "description": "پیگیری با کد سفارش"
+    }
+  ]
+}

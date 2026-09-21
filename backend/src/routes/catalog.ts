@@ -73,12 +73,17 @@ export function normalizeQuery(raw: string | null): string {
 
 type Sorter = (a: Product, b: Product) => number;
 
+/** Discount fraction (0..1); products without a deal sink to the bottom via -1. */
+const discountFrac = (p: Product): number =>
+  p.oldPrice !== null && p.oldPrice > p.price ? (p.oldPrice - p.price) / p.oldPrice : -1;
+
 const SORTERS: Record<string, Sorter> = {
   newest: (a, b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
   cheap: (a, b) => a.price - b.price || a.id.localeCompare(b.id),
   expensive: (a, b) => b.price - a.price || a.id.localeCompare(b.id),
   popular: (a, b) => b.sold - a.sold || b.views - a.views || a.id.localeCompare(b.id),
   rating: (a, b) => b.ratingAvg - a.ratingAvg || b.ratingCount - a.ratingCount || a.id.localeCompare(b.id),
+  discount: (a, b) => discountFrac(b) - discountFrac(a) || a.id.localeCompare(b.id),
 };
 
 /* ---------- handlers ---------- */
@@ -164,9 +169,15 @@ export function filterProducts(db: DBState, url: URL): Product[] {
   const max = num(url.searchParams.get('max'));
   const inStock = url.searchParams.get('inStock') === '1';
   const featured = url.searchParams.get('featured') === '1';
+  // comma-separated id whitelist (wishlist / compare / recently-viewed fetches)
+  const idsParam = url.searchParams.get('ids');
+  const ids = idsParam
+    ? new Set(idsParam.split(',').map((s) => s.trim()).filter(Boolean))
+    : null;
 
   return db.products.filter((p) => {
     if (p.active === false) return false;
+    if (ids && !ids.has(p.id)) return false;
     if (cat && p.categoryId !== cat) return false;
     if (brand && p.brandId !== brand) return false;
     if (min !== undefined && p.price < min) return false;

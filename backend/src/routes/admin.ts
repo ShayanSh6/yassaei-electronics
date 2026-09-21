@@ -1,5 +1,5 @@
 /** Admin routes: stats, product CRUD, order management, users. All require owner|staff. */
-import type { Order, OrderStatus, Product } from '../types';
+import type { Order, OrderStatus, OrderStatusEvent, Product } from '../types';
 import type { Store } from '../db';
 import { requireAdmin } from '../auth';
 import {
@@ -15,14 +15,23 @@ import {
   str,
 } from '../util';
 import { matchesQuery, normalizeQuery } from './catalog';
+import { sanitizeBulkTiers } from './shop';
 
 const ORDER_STATUSES: OrderStatus[] = ['pending', 'processing', 'shipped', 'done', 'canceled'];
 
 /* ---------- stats ---------- */
 
+/** Low-stock threshold from settings (default 5, clamped 1..100). */
+export function lowStockThreshold(store: Store): number {
+  const raw = store.db.settings.inventory?.lowStockThreshold;
+  const n = typeof raw === 'number' ? Math.round(raw) : NaN;
+  return Number.isFinite(n) && n >= 1 && n <= 100 ? n : 5;
+}
+
 export function adminStats(store: Store, req: Request): Response {
   requireAdmin(store, req);
   const db = store.db;
+  const threshold = lowStockThreshold(store);
 
   const ordersByStatus = { pending: 0, processing: 0, shipped: 0, done: 0, canceled: 0 };
   let ordersTotal = 0;
@@ -42,9 +51,30 @@ export function adminStats(store: Store, req: Request): Response {
     .slice(0, 8)
     .map((p) => ({ id: p.id, name: p.name, sold: p.sold, price: p.price }));
 
+  // revenue per day for the last 14 days (non-canceled), oldest → newest
+  const daily: { day: string; label: string; total: number; count: number }[] = [];
+  const today = new Date();
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    daily.push({ day: key, label: `${d.getMonth() + 1}/${d.getDate()}`, total: 0, count: 0 });
+  }
+  const byDay = new Map(daily.map((d) => [d.day, d]));
+  for (const o of db.orders) {
+    if (o.status === 'canceled') continue;
+    const day = String(o.createdAt).slice(0, 10);
+    const slot = byDay.get(day);
+    if (slot) {
+      slot.total += o.total;
+      slot.count += 1;
+    }
+  }
+
   return json({
     products: db.products.length,
-    lowStock: db.products.filter((p) => p.stock < 5).length,
+    lowStock: db.products.filter((p) => p.stock < threshold).length,
+    lowStockThreshold: threshold,
     orders: db.orders.length,
     ordersTotal,
     revenueTotal,
@@ -52,7 +82,41 @@ export function adminStats(store: Store, req: Request): Response {
     ordersByStatus,
     recentOrders,
     topProducts,
+    dailyRevenue: daily,
   });
+}
+
+/* ---------- settings ---------- */
+
+export function adminGetSettings(store: Store, req: Request): Response {
+  requireAdmin(store, req);
+  return json({
+    inventory: {
+      lowStockThreshold: lowStockThreshold(store),
+    },
+  });
+}
+
+export async function adminPatchSettings(store: Store, req: Request): Promise<Response> {
+  requireAdmin(store, req);
+  const body = await readJson(req);
+  const inventory = body.inventory;
+  if (inventory !== undefined) {
+    if (typeof inventory !== 'object' || inventory === null) {
+      throw new HttpError(400, 'بخش تنظیمات نامعتبر است');
+    }
+    const raw = (inventory as Record<string, unknown>).lowStockThreshold;
+    if (raw !== undefined) {
+      const n = typeof raw === 'number' ? Math.round(raw) : NaN;
+      if (!Number.isFinite(n) || n < 1 || n > 100) {
+        throw new HttpError(400, 'آستانهٔ کم‌موجودی باید عددی بین ۱ تا ۱۰۰ باشد');
+      }
+      store.transaction((db) => {
+        db.settings.inventory = { ...(db.settings.inventory ?? {}), lowStockThreshold: n };
+      });
+    }
+  }
+  return adminGetSettings(store, req);
 }
 
 /* ---------- products ---------- */
@@ -156,6 +220,7 @@ export async function adminCreateProduct(store: Store, req: Request): Promise<Re
       createdAt: nowISO(),
       updatedAt: nowISO(),
       condition: str(body.condition) || 'new',
+      bulkTiers: sanitizeBulkTiers(body.bulkTiers) ?? null,
     };
     db.products.push(p);
     return p;
@@ -228,6 +293,10 @@ export async function adminPatchProduct(store: Store, req: Request, id: string):
       }
       p.specs = body.specs as Record<string, string | number>;
     }
+    {
+      const tiers = sanitizeBulkTiers(body.bulkTiers);
+      if (tiers !== undefined) p.bulkTiers = tiers;
+    }
 
     // keep denormalized brand names in sync
     const brand = db.brands.find((b) => b.id === p.brandId);
@@ -259,12 +328,24 @@ export function adminListOrders(store: Store, req: Request, url: URL): Response 
   requireAdmin(store, req);
   const db = store.db;
   const status = url.searchParams.get('status');
+  const q = normalizeQuery(url.searchParams.get('q'));
   let filtered = [...db.orders];
   if (status) {
     if (!ORDER_STATUSES.includes(status as OrderStatus)) {
       throw new HttpError(400, 'وضعیت سفارش نامعتبر است');
     }
     filtered = filtered.filter((o) => o.status === status);
+  }
+  if (q) {
+    const digits = q.replace(/\D/g, '');
+    filtered = filtered.filter(
+      (o) =>
+        o.code.toLowerCase().includes(q) ||
+        o.id.toLowerCase().includes(q) ||
+        normalizeQuery(o.customer.name).includes(q) ||
+        (digits.length > 0 && o.customer.phone.replace(/\D/g, '').includes(digits)) ||
+        o.items.some((it) => normalizeQuery(it.name).includes(q)),
+    );
   }
   filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id));
 
@@ -313,6 +394,13 @@ export async function adminPatchOrder(store: Store, req: Request, id: string): P
     }
 
     o.status = status;
+    // append to the audit trail (cap 20 entries)
+    const history: OrderStatusEvent[] = Array.isArray(o.statusHistory) ? o.statusHistory : [];
+    if (history.length === 0) history.push({ status: 'pending', at: o.createdAt }); // seed origin for old orders
+    if (history[history.length - 1]?.status !== status) {
+      history.push({ status, at: nowISO() });
+    }
+    o.statusHistory = history.slice(-20);
     return o;
   });
 

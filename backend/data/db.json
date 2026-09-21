@@ -837,7 +837,7 @@
    "featured": true,
    "active": true,
    "weight": 0,
-   "views": 0,
+   "views": 3,
    "sold": 0,
    "ratingAvg": 0,
    "ratingCount": 0,
@@ -876,12 +876,12 @@
    "featured": true,
    "active": true,
    "weight": 0,
-   "views": 0,
+   "views": 7,
    "sold": 0,
    "ratingAvg": 0,
    "ratingCount": 0,
    "createdAt": "2026-09-10T12:00:00.000Z",
-   "updatedAt": "2026-09-10T12:00:00.000Z"
+   "updatedAt": "2026-09-21T19:54:43.917Z"
   },
   {
    "id": "ys-006",
@@ -1151,7 +1151,7 @@
    "featured": true,
    "active": true,
    "weight": 0,
-   "views": 0,
+   "views": 2,
    "sold": 0,
    "ratingAvg": 0,
    "ratingCount": 0,
@@ -6138,15 +6138,33 @@
    "phone": "",
    "passwordHash": "scrypt$d13cd7030cf9cce76556eb8851f050c9$c525536f1794eb9554d4356fe244fe8f8ec3a04e066096d3ec5fc31fcff075d622ecf08c437a8d8acb3b313da75616edd3a8cc472bb907b577a1530ccd8d2ecd",
    "createdAt": "2026-09-21T17:37:04.772Z",
-   "lastLoginAt": "2026-09-21T18:03:02.823Z"
+   "lastLoginAt": "2026-09-21T19:59:56.919Z"
   }
  ],
  "sessions": [
   {
-   "token": "e57df21f24da9e59587ba3e5756f73f7b297aa72095b2ab4ced1688d674b0a30",
+   "token": "1724d113a3f1f4ca09ec96033dd783db30efa1a8f91ca75d175af1a897f0713f",
    "userId": "u-admin",
    "role": "owner",
-   "createdAt": "2026-09-21T18:03:02.823Z"
+   "createdAt": "2026-09-21T19:38:12.181Z"
+  },
+  {
+   "token": "07cc168100ff7a4b63a8ca28b8940de39d5f05f89c19c42a7fcf448f47eb58ca",
+   "userId": "u-admin",
+   "role": "owner",
+   "createdAt": "2026-09-21T19:39:36.371Z"
+  },
+  {
+   "token": "b1fac5e07e37a29668f1370bc7e2a1a3462bad060fb3871d7ba8f75838e8b249",
+   "userId": "u-admin",
+   "role": "owner",
+   "createdAt": "2026-09-21T19:57:02.977Z"
+  },
+  {
+   "token": "18e3be86ce4637270ab8b74d6f6ec62810629f538b290665677ed782eb4f2ed3",
+   "userId": "u-admin",
+   "role": "owner",
+   "createdAt": "2026-09-21T19:59:56.919Z"
   }
  ],
  "orders": [
@@ -6180,6 +6198,24 @@
   }
  ],
  "reviews": [],
+ "questions": [
+  {
+   "id": "qa-demo-1",
+   "productId": "ys-005",
+   "name": "مریم رضایی",
+   "question": "برای درایور LED چند عدد از این ترانزیستور لازم دارم؟ محدودیت جریانش چقدر است؟",
+   "answer": "برای هر خروجی درایور LED یک ترانزیستور 2N2222 کافی است؛ جریان коллектور تا ۸۰۰ میلی‌آمپر مجاز است و برای درایورهای معمول LED مناسب است. پیشنهاد می‌کنیم بستهٔ ۱۰ عددی بگیرید تا با تخفیف عمده همراه شود.",
+   "answeredAt": "2026-09-21T19:17:44.000Z",
+   "createdAt": "2026-09-21T18:42:44.000Z"
+  },
+  {
+   "id": "qa-demo-2",
+   "productId": "ys-004",
+   "name": "حسین کریمی",
+   "question": "برای مدار فلیپ‌فاپ ۱ هرتز با NE555 چه مقدار خازن و مقاومت لازم است؟ آیا در فروشگاه هم موجود است؟",
+   "createdAt": "2026-09-21T19:29:44.000Z"
+  }
+ ],
  "stats": {
   "ordersTotal": 0,
   "revenueTotal": 0

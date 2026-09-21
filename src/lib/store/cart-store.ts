@@ -67,6 +67,31 @@ export const useCompare = create<CompareState>()(
   ),
 );
 
+interface WishlistState {
+  ids: string[];
+  toggle: (id: string) => boolean; // returns true when now favorited
+  remove: (id: string) => void;
+  clear: () => void;
+}
+
+export const useWishlist = create<WishlistState>()(
+  persist(
+    (set, get) => ({
+      ids: [],
+      toggle: (id) => {
+        const has = get().ids.includes(id);
+        set((s) => ({
+          ids: has ? s.ids.filter((x) => x !== id) : [id, ...s.ids].slice(0, 50),
+        }));
+        return !has;
+      },
+      remove: (id) => set((s) => ({ ids: s.ids.filter((x) => x !== id) })),
+      clear: () => set({ ids: [] }),
+    }),
+    { name: "yassaei.wishlist", skipHydration: true },
+  ),
+);
+
 interface RecentlyViewedState {
   ids: string[];
   push: (id: string) => void;

@@ -53,6 +53,8 @@ export interface Product {
   condition: string;
   createdAt: string;
   updatedAt: string;
+  /** Per-product wholesale tier override (null/undefined → global tiers). */
+  bulkTiers?: BulkTier[] | null;
 }
 
 export interface User {
@@ -70,6 +72,14 @@ export interface OrderItem {
   price: number;
   qty: number;
   image: string;
+  unitPrice?: number;
+  bulkPercent?: number;
+}
+
+/** Quantity-tier wholesale discount (mirror of backend BulkTier). */
+export interface BulkTier {
+  minQty: number;
+  percent: number;
 }
 
 export interface OrderCustomer {
@@ -95,6 +105,8 @@ export interface Order {
   payment: string;
   couponCode?: string;
   userId: string | null;
+  bulkDiscount?: number;
+  statusHistory?: OrderStatusEvent[];
   createdAt: string;
   updatedAt?: string;
 }
@@ -163,4 +175,24 @@ export interface CartValidatedItem {
   qty: number;
   image: string;
   active: boolean;
+  unitPrice?: number;
+  bulkPercent?: number;
+}
+
+/** Product Q&A: guests ask, staff answers (mirror of backend). */
+export interface QAQuestion {
+  id: string;
+  productId: string;
+  name: string;
+  question: string;
+  answer?: string;
+  answeredAt?: string | null;
+  helpful?: number;
+  createdAt: string;
+}
+
+/** One order status transition (mirror of backend). */
+export interface OrderStatusEvent {
+  status: OrderStatus;
+  at: string;
 }

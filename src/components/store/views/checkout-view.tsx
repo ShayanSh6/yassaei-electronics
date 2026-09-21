@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { MapPin, Truck, Store, Wallet, CreditCard, ChevronLeft, PartyPopper } from "lucide-react";
+import { MapPin, Truck, Store, Wallet, CreditCard, ChevronLeft, PartyPopper, BadgePercent } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/store/api";
@@ -54,6 +54,7 @@ export function CheckoutView() {
 
   const items = data?.items ?? [];
   const subtotal = data?.subtotal ?? 0;
+  const bulkDiscount = data?.bulkDiscount ?? 0;
   const shippingCost = SHIPPING_OPTIONS.find((s) => s.value === shipping)?.cost ?? 0;
   const freePost = shipping === "post" && subtotal >= 2_000_000;
   const ship = freePost ? 0 : shippingCost;
@@ -201,14 +202,20 @@ export function CheckoutView() {
                 <img src={it.image} alt="" className="size-9 rounded-lg bg-secondary/40 object-contain shrink-0" />
                 <span className="flex-1 text-[11px] clamp-2 leading-4">{it.name}</span>
                 <span className="text-[10px] text-muted-foreground num shrink-0">×{toFa(it.qty)}</span>
-                <span className="text-[10px] num shrink-0">{formatToman(it.price * it.qty)}</span>
+                <span className="text-[10px] num shrink-0">{formatToman((it.unitPrice ?? it.price) * it.qty)}</span>
               </div>
             ))}
           </div>
           <Separator />
           <div className="space-y-2 text-xs">
             <div className="flex justify-between"><span className="text-muted-foreground">جمع کالاها</span><span className="num">{formatToman(subtotal)}</span></div>
-            {discount > 0 && <div className="flex justify-between text-emerald-400"><span>تخفیف</span><span className="num">−{formatToman(discount)}</span></div>}
+            {bulkDiscount > 0 && (
+              <div className="flex justify-between text-emerald-400">
+                <span className="flex items-center gap-1"><BadgePercent className="size-3.5" /> تخفیف خرید عمده</span>
+                <span className="num">−{formatToman(bulkDiscount)}</span>
+              </div>
+            )}
+            {discount > 0 && <div className="flex justify-between text-emerald-400"><span>کد تخفیف</span><span className="num">−{formatToman(discount)}</span></div>}
             <div className="flex justify-between"><span className="text-muted-foreground">ارسال</span><span className={ship === 0 ? "text-emerald-400" : "num"}>{ship === 0 ? "رایگان" : formatToman(ship)}</span></div>
             <Separator />
             <div className="flex justify-between items-center">

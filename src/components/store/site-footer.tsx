@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Zap, Phone, MapPin, Clock, Send, Instagram, Mail, ShieldCheck, Truck, BadgeCheck, CreditCard } from "lucide-react";
+import { Zap, Phone, MapPin, Clock, Send, Instagram, Mail, ShieldCheck, Truck, BadgeCheck, CreditCard, Megaphone, PackageSearch } from "lucide-react";
+import { toast } from "sonner";
 import { api } from "@/lib/store/api";
 import { navigate, toFa } from "@/lib/store/router";
 import type { StoreInfo } from "@/lib/store/types";
+import { Button } from "@/components/ui/button";
 
 const TRUST_ITEMS = [
   { icon: ShieldCheck, title: "ضمانت اصالت کالا", sub: "مرجوعی تا ۷ روز بدون پرسش" },
@@ -20,9 +23,29 @@ export function SiteFooter() {
     staleTime: 5 * 60 * 1000,
   });
   const store: StoreInfo | undefined = data?.store;
+  const [nlValue, setNlValue] = useState("");
+
+  const subscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    const v = nlValue.trim();
+    const isPhone = /^0\d{10}$/.test(v.replace(/\s/g, ""));
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    if (!isPhone && !isEmail) {
+      toast.error("ایمیل یا شماره موبایل معتبر وارد کنید");
+      return;
+    }
+    try {
+      const subs = JSON.parse(localStorage.getItem("yassaei.newsletter") ?? "[]") as string[];
+      if (!subs.includes(v)) localStorage.setItem("yassaei.newsletter", JSON.stringify([...subs, v]));
+    } catch {
+      localStorage.setItem("yassaei.newsletter", JSON.stringify([v]));
+    }
+    toast.success("عضویت شما در خبرنامه ثبت شد", { description: "تخفیف‌ها را زودتر از همه می‌شنوید" });
+    setNlValue("");
+  };
 
   return (
-    <footer className="mt-auto border-t border-border/50 bg-card/40">
+    <footer className="mt-auto border-t border-border/50 bg-card/40 print:hidden">
       {/* trust bar */}
       <div className="border-b border-border/40 bg-background/60">
         <div className="mx-auto max-w-7xl px-4 grid grid-cols-2 lg:grid-cols-4 gap-3 py-5">
@@ -37,6 +60,31 @@ export function SiteFooter() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* newsletter strip */}
+      <div className="border-b border-border/40 bg-gradient-to-l from-brand/10 via-transparent to-brand/10">
+        <div className="mx-auto max-w-7xl px-4 py-5 flex flex-col lg:flex-row items-center gap-4 justify-between">
+          <div className="flex items-center gap-3 text-center lg:text-right">
+            <span className="hidden sm:grid place-items-center size-11 rounded-xl bg-brand/15 text-brand shrink-0">
+              <Megaphone className="size-5" />
+            </span>
+            <div>
+              <div className="text-sm font-bold">عضویت در خبرنامهٔ یاسایی</div>
+              <div className="text-[11px] text-muted-foreground">از تخفیف‌های هفتگی و کالاهای تازه باخبر شوید</div>
+            </div>
+          </div>
+          <form onSubmit={subscribe} className="flex w-full max-w-md gap-2">
+            <input
+              value={nlValue}
+              onChange={(e) => setNlValue(e.target.value)}
+              placeholder="ایمیل یا شماره موبایل…"
+              className="flex-1 h-10 rounded-xl bg-card border border-border/70 px-4 text-xs outline-none focus:border-brand/60 transition-colors"
+              aria-label="ایمیل یا شماره موبایل برای خبرنامه"
+            />
+            <Button type="submit" size="sm" className="h-10 px-5 font-bold">عضویت</Button>
+          </form>
         </div>
       </div>
 
@@ -84,6 +132,11 @@ export function SiteFooter() {
           <ul className="space-y-2 text-xs text-muted-foreground">
             <li><a className="hover:text-brand transition-colors" href="#/catalog">همهٔ محصولات</a></li>
             <li><a className="hover:text-brand transition-colors" href="#/catalog?featured=1">پیشنهاد ویژه</a></li>
+            <li>
+              <a className="hover:text-brand transition-colors flex items-center gap-1.5" href="#/track">
+                <PackageSearch className="size-3.5" /> پیگیری سفارش
+              </a>
+            </li>
             <li><a className="hover:text-brand transition-colors" href="#/page/about">دربارهٔ یاسایی</a></li>
             <li><a className="hover:text-brand transition-colors" href="#/page/faq">پرسش‌های متداول</a></li>
             <li><a className="hover:text-brand transition-colors" href="#/page/terms">قوانین فروشگاه</a></li>

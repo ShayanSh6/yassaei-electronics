@@ -24,6 +24,7 @@ const SORTS: { value: string; label: string }[] = [
   { value: "expensive", label: "گران‌ترین" },
   { value: "popular", label: "پرفروش‌ترین" },
   { value: "rating", label: "بهترین امتیاز" },
+  { value: "discount", label: "بیشترین تخفیف" },
 ];
 
 function FilterPanel({

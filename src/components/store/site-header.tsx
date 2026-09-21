@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Search, ShoppingCart, User2, Menu, Phone, LayoutDashboard, LogOut, Package, X, Zap,
+  Heart, GitCompareArrows,
 } from "lucide-react";
 import { formatToman, navigate, toFa } from "@/lib/store/router";
 import { api } from "@/lib/store/api";
-import { useCart } from "@/lib/store/cart-store";
+import { useCart, useCompare, useWishlist } from "@/lib/store/cart-store";
 import { useAuth } from "@/lib/store/auth-store";
 import type { Category } from "@/lib/store/types";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./theme-toggle";
 
 interface Suggestion {
   id: string;
@@ -32,13 +34,34 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const cartCount = useCart((s) => s.lines.reduce((acc, l) => acc + l.qty, 0));
+  const wishCount = useWishlist((s) => s.ids.length);
+  const compareCount = useCompare((s) => s.ids.length);
   const { user, logout } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // global search shortcut: Ctrl+K or "/"
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const typing = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchRef.current?.focus();
+        searchRef.current?.select();
+      } else if (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   useEffect(() => {
@@ -75,7 +98,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300 border-b",
+        "sticky top-0 z-50 transition-all duration-300 border-b print:hidden",
         scrolled
           ? "glass shadow-[0_4px_24px_-8px_#0006]"
           : "bg-background/80 backdrop-blur-md border-transparent",
@@ -111,6 +134,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           <div className="relative">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input
+              ref={searchRef}
               value={q}
               onChange={(e) => {
                 setQ(e.target.value);
@@ -122,9 +146,17 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
               onKeyDown={(e) => e.key === "Enter" && submitSearch()}
               onFocus={() => suggestions.length && setOpenSuggest(true)}
               placeholder="جست‌وجوی قطعه، برند یا کد فنی…"
-              className="w-full h-10 rounded-xl bg-secondary/60 border border-border/60 pr-9 pl-9 text-sm outline-none focus:border-brand/60 focus:bg-secondary transition-colors placeholder:text-muted-foreground/70"
+              className="w-full h-10 rounded-xl bg-secondary/60 border border-border/60 pr-9 pl-20 text-sm outline-none focus:border-brand/60 focus:bg-secondary transition-colors placeholder:text-muted-foreground/70"
               aria-label="جست‌وجو در محصولات"
+              role="searchbox"
             />
+            {/* shortcut hint */}
+            {!q && (
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-1 pointer-events-none" aria-hidden>
+                <kbd className="rounded-md border border-border/70 bg-secondary/80 px-1.5 py-0.5 text-[9px] font-sans text-muted-foreground">Ctrl</kbd>
+                <kbd className="rounded-md border border-border/70 bg-secondary/80 px-1.5 py-0.5 text-[9px] font-sans text-muted-foreground">K</kbd>
+              </span>
+            )}
             {q && (
               <button
                 onClick={() => { setQ(""); setSuggestions([]); }}
@@ -193,6 +225,13 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                     <div className="text-[11px] text-muted-foreground font-normal" dir="ltr">@{user.username}</div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/wishlist")}>
+                    <Heart className="size-4 ml-2" /> علاقه‌مندی‌ها
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/compare")}>
+                    <GitCompareArrows className="size-4 ml-2" /> مقایسه کالاها
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate("/account")}>
                     <Package className="size-4 ml-2" /> حساب کاربری و سفارش‌ها
                   </DropdownMenuItem>
@@ -221,6 +260,37 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* theme / wishlist / compare (icon strip) */}
+          <div className="hidden sm:flex items-center gap-1">
+            <ThemeToggle />
+            <Button
+              variant="ghost" size="icon"
+              className="relative size-9 hover:bg-red-500/10 hover:text-red-400"
+              onClick={() => navigate("/wishlist")}
+              aria-label="علاقه‌مندی‌ها"
+            >
+              <Heart className={cn("size-[18px]", wishCount > 0 && "fill-red-400/20 text-red-400")} />
+              {wishCount > 0 && (
+                <span className="absolute -top-1 -right-1 grid place-items-center size-4.5 min-w-4.5 h-4.5 px-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold num">
+                  {toFa(wishCount)}
+                </span>
+              )}
+            </Button>
+            <Button
+              variant="ghost" size="icon"
+              className="relative size-9 hover:bg-brand/10 hover:text-brand"
+              onClick={() => navigate("/compare")}
+              aria-label="مقایسه کالاها"
+            >
+              <GitCompareArrows className="size-[18px]" />
+              {compareCount > 0 && (
+                <span className="absolute -top-1 -right-1 grid place-items-center size-4.5 min-w-4.5 h-4.5 px-0.5 rounded-full bg-brand text-primary-foreground text-[9px] font-bold num">
+                  {toFa(compareCount)}
+                </span>
+              )}
+            </Button>
+          </div>
 
           <Button
             variant="outline" size="sm"
@@ -258,6 +328,18 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                   </button>
                 ))}
               </nav>
+              <div className="mt-3 border-t border-border/40 pt-3 flex flex-col gap-1">
+                <div className="flex items-center justify-between rounded-lg px-3 py-1.5">
+                  <span className="text-sm text-muted-foreground">پوسته سایت</span>
+                  <ThemeToggle />
+                </div>
+                <button
+                  onClick={() => { setMobileOpen(false); navigate("/track"); }}
+                  className="flex items-center rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary/70 hover:text-foreground transition-colors"
+                >
+                  پیگیری سفارش
+                </button>
+              </div>
             </SheetContent>
           </Sheet>
         </div>

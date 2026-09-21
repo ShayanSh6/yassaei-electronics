@@ -1,15 +1,28 @@
 /**
- * Atomic JSON-file store.
+ * In-memory store with pluggable persistence (PostgreSQL driver or JSON file).
  *
  * - Full state is kept in memory and mutated synchronously by route handlers.
- * - Writes are debounced (~200ms): state is serialized to `db.json.tmp` and the
- *   file is then renamed over `db.json`, so readers never see a partial file.
+ * - Persistence is debounced (~200ms). With the PostgreSQL driver attached the
+ *   whole state is written in a single transaction (see db-pg.ts); otherwise it
+ *   is serialized to `db.json.tmp` which is atomically renamed over `db.json`.
  * - `transaction()` gives all-or-nothing semantics: if the mutator throws, the
  *   in-memory state is rolled back from a snapshot and nothing is saved.
+ * - If PostgreSQL is attached but a save fails, a JSON snapshot is written as
+ *   a safety net so no data can be lost.
  */
-import { existsSync, mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from 'node:fs';
+import {
+  closeSync,
+  existsSync,
+  fsyncSync,
+  mkdirSync,
+  openSync,
+  readFileSync,
+  renameSync,
+  statSync,
+  writeSync,
+} from 'node:fs';
 import path from 'node:path';
-import type { DBState } from './types';
+import type { DBState, DbDriver } from './types';
 import { ADMIN_PASSWORD, DB_PATH } from './config';
 import { hashPassword } from './auth';
 import { nowISO } from './util';
@@ -30,6 +43,7 @@ function emptyState(): DBState {
     sessions: [],
     orders: [],
     reviews: [],
+    questions: [],
     stats: { ordersTotal: 0, revenueTotal: 0 },
   };
 }
@@ -37,13 +51,14 @@ function emptyState(): DBState {
 export class Store {
   private data: DBState;
   private dbPath: string;
+  private driver: DbDriver | null = null;
   private timer: ReturnType<typeof setTimeout> | null = null;
   private saving = false;
   private pendingSave = false;
 
   constructor(dbPath: string = DB_PATH) {
     this.dbPath = dbPath;
-    this.data = this.load();
+    this.data = this.loadJson();
     this.seedOwnerIfNeeded();
   }
 
@@ -52,29 +67,40 @@ export class Store {
     return this.data;
   }
 
-  private load(): DBState {
+  /** Which persistence backend is currently attached. */
+  get driverName(): 'postgres' | 'json' {
+    return this.driver?.name ?? 'json';
+  }
+
+  /** Fill every collection from a partial snapshot (JSON file or remote driver). */
+  private normalize(parsed: Partial<DBState>): DBState {
+    const base = emptyState();
+    return {
+      ...base,
+      ...parsed,
+      settings: parsed.settings ?? base.settings,
+      pages: parsed.pages ?? base.pages,
+      stats: parsed.stats ?? base.stats,
+      categories: Array.isArray(parsed.categories) ? parsed.categories : [],
+      brands: Array.isArray(parsed.brands) ? parsed.brands : [],
+      products: Array.isArray(parsed.products) ? parsed.products : [],
+      coupons: Array.isArray(parsed.coupons) ? parsed.coupons : [],
+      users: Array.isArray(parsed.users) ? parsed.users : [],
+      sessions: Array.isArray(parsed.sessions) ? parsed.sessions : [],
+      orders: Array.isArray(parsed.orders) ? parsed.orders : [],
+      reviews: Array.isArray(parsed.reviews) ? parsed.reviews : [],
+      questions: Array.isArray(parsed.questions) ? parsed.questions : [],
+    };
+  }
+
+  private loadJson(): DBState {
     try {
       if (!existsSync(this.dbPath)) {
         console.warn(`[db] ${this.dbPath} not found — starting with an empty state`);
         return emptyState();
       }
       const parsed = JSON.parse(readFileSync(this.dbPath, 'utf8')) as Partial<DBState>;
-      const base = emptyState();
-      const state: DBState = {
-        ...base,
-        ...parsed,
-        settings: parsed.settings ?? base.settings,
-        pages: parsed.pages ?? base.pages,
-        stats: parsed.stats ?? base.stats,
-        categories: Array.isArray(parsed.categories) ? parsed.categories : [],
-        brands: Array.isArray(parsed.brands) ? parsed.brands : [],
-        products: Array.isArray(parsed.products) ? parsed.products : [],
-        coupons: Array.isArray(parsed.coupons) ? parsed.coupons : [],
-        users: Array.isArray(parsed.users) ? parsed.users : [],
-        sessions: Array.isArray(parsed.sessions) ? parsed.sessions : [],
-        orders: Array.isArray(parsed.orders) ? parsed.orders : [],
-        reviews: Array.isArray(parsed.reviews) ? parsed.reviews : [],
-      };
+      const state = this.normalize(parsed);
       console.log(
         `[db] loaded ${state.products.length} products, ${state.categories.length} categories, ` +
           `${state.users.length} users, ${state.orders.length} orders from ${path.basename(this.dbPath)}`,
@@ -84,6 +110,29 @@ export class Store {
       console.error('[db] failed to load database file — using empty state', err);
       return emptyState();
     }
+  }
+
+  /**
+   * Attach a persistence driver (PostgreSQL). Loads the remote state into
+   * memory, or — when the remote store is fresh — migrates the current
+   * in-memory seed (normally loaded from db.json) into it.
+   */
+  async attachDriver(driver: DbDriver): Promise<void> {
+    const remote = await driver.load();
+    if (remote) {
+      this.data = this.normalize(remote);
+      console.log(
+        `[db] loaded ${this.data.products.length} products, ${this.data.categories.length} categories, ` +
+          `${this.data.users.length} users, ${this.data.orders.length} orders from ${driver.name}`,
+      );
+    } else {
+      await driver.save(this.data);
+      console.log(
+        `[db] migrated JSON seed → ${driver.name}: ${this.data.products.length} products, ` +
+          `${this.data.users.length} users, ${this.data.orders.length} orders`,
+      );
+    }
+    this.driver = driver;
   }
 
   /** First boot: create the owner account from ADMIN_PASSWORD (or its fallback). */
@@ -100,7 +149,7 @@ export class Store {
       lastLoginAt: null,
     };
     this.data.users.push(owner);
-    this.flushSync();
+    void this.flush();
     console.log('[db] users[] was empty — seeded owner account "admin"');
   }
 
@@ -126,7 +175,7 @@ export class Store {
     }
   }
 
-  /** Write state to tmp file then atomically rename over the real file. */
+  /** Debounced persistence: driver save (with JSON fallback) or atomic file write. */
   async flush(): Promise<void> {
     if (this.saving) {
       this.pendingSave = true;
@@ -134,9 +183,16 @@ export class Store {
     }
     this.saving = true;
     try {
-      this.writeAtomic();
-    } catch (err) {
-      console.error('[db] async save failed', err);
+      if (this.driver) {
+        try {
+          await this.driver.save(this.data);
+        } catch (err) {
+          console.error('[db] driver save failed — JSON snapshot written as fallback', err);
+          this.writeAtomic();
+        }
+      } else {
+        this.writeAtomic();
+      }
     } finally {
       this.saving = false;
       if (this.pendingSave) {
@@ -146,25 +202,63 @@ export class Store {
     }
   }
 
-  /** Synchronous flush used on first boot and graceful shutdown. */
-  flushSync(): void {
+  /** Persist everything, release the driver, and never hang (graceful shutdown). */
+  async shutdown(): Promise<void> {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
     }
     try {
-      this.writeAtomic();
+      if (this.driver) {
+        try {
+          await this.driver.save(this.data);
+        } catch (err) {
+          console.error('[db] driver save on shutdown failed — JSON snapshot written', err);
+          this.writeAtomic();
+        }
+        await this.driver.close();
+      } else {
+        this.writeAtomic();
+      }
     } catch (err) {
-      console.error('[db] sync save failed', err);
+      console.error('[db] shutdown save failed', err);
     }
   }
 
+  /** Write state to tmp file then atomically rename over the real file. */
   private writeAtomic(): void {
     const dir = path.dirname(this.dbPath);
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
     const tmp = `${this.dbPath}.${process.pid}.tmp`;
-    writeFileSync(tmp, JSON.stringify(this.data, null, 1), 'utf8');
+    // write + fsync before rename: guarantees the tmp file is fully on disk,
+    // so a crash right after rename can never leave a truncated/partial DB.
+    const fd = openSync(tmp, 'w');
+    try {
+      writeSync(fd, JSON.stringify(this.data, null, 1));
+      fsyncSync(fd);
+    } finally {
+      closeSync(fd);
+    }
     renameSync(tmp, this.dbPath);
+  }
+
+  /** Human-readable info for /api/health. */
+  async describe(): Promise<Record<string, unknown>> {
+    if (this.driver) {
+      try {
+        return await this.driver.describe();
+      } catch (err) {
+        return { store: this.driver.name, error: 'describe failed', detail: String(err) };
+      }
+    }
+    return {
+      store: 'json',
+      file: path.basename(this.dbPath),
+      sizeKB: this.fileSizeKB(),
+      products: this.data.products.length,
+      orders: this.data.orders.length,
+      users: this.data.users.length,
+    };
   }
 
   /** Human-readable db file size, for startup logs. */

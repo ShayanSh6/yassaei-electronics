@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import { Home, LayoutGrid, ShoppingCart, User2 } from "lucide-react";
+import { Home, LayoutGrid, ShoppingCart, User2, ArrowUp } from "lucide-react";
 import { api } from "@/lib/store/api";
-import { navigate, useHashRoute, useQueryUpdater, toFa } from "@/lib/store/router";
-import { useCart, useCompare, useRecentlyViewed } from "@/lib/store/cart-store";
+import { navigate, useHashRoute, useQueryUpdater, toFa, usePageTitle } from "@/lib/store/router";
+import { useCart, useCompare, useRecentlyViewed, useWishlist } from "@/lib/store/cart-store";
 import { useAuth } from "@/lib/store/auth-store";
 import { SiteHeader } from "@/components/store/site-header";
 import { SiteFooter } from "@/components/store/site-footer";
@@ -19,7 +19,10 @@ import { CheckoutView } from "@/components/store/views/checkout-view";
 import { AuthView } from "@/components/store/views/auth-view";
 import { AccountView } from "@/components/store/views/account-view";
 import { OrderView } from "@/components/store/views/order-view";
+import { TrackView } from "@/components/store/views/track-view";
 import { PageView } from "@/components/store/views/page-view";
+import { WishlistView } from "@/components/store/views/wishlist-view";
+import { CompareView } from "@/components/store/views/compare-view";
 import { NotFoundView } from "@/components/store/views/not-found-view";
 import { AdminView } from "@/components/store/views/admin/admin-view";
 import { cn } from "@/lib/utils";
@@ -30,9 +33,26 @@ const queryClient = new QueryClient({
   },
 });
 
+const ROUTE_TITLES: Record<string, string> = {
+  catalog: "فروشگاه",
+  cart: "سبد خرید",
+  checkout: "تسویهٔ حساب",
+  wishlist: "علاقه‌مندی‌های من",
+  compare: "مقایسهٔ کالاها",
+  track: "پیگیری سفارش",
+  login: "ورود به حساب",
+  register: "ساخت حساب",
+  account: "حساب کاربری",
+  order: "سفارش",
+  admin: "پنل مدیریت",
+  page: "صفحه",
+  product: "محصول",
+};
+
 function Router({ route }: { route: ReturnType<typeof useHashRoute> }) {
   const updateCatalogQuery = useQueryUpdater("/catalog");
   const seg = route.segments;
+  usePageTitle(seg[0] ? ROUTE_TITLES[seg[0]] : null);
 
   // /catalog?cat=parts&q=...&sort=...&page=...
   if (seg[0] === "catalog" || (seg.length === 0 && route.query.toString() && route.query.get("cat"))) {
@@ -56,11 +76,14 @@ function Router({ route }: { route: ReturnType<typeof useHashRoute> }) {
   }
   if (seg[0] === "product" && seg[1]) return <ProductView key={seg[1]} id={seg[1]} />;
   if (seg[0] === "cart") return <CartView />;
+  if (seg[0] === "wishlist") return <WishlistView />;
+  if (seg[0] === "compare") return <CompareView />;
   if (seg[0] === "checkout") return <CheckoutView />;
   if (seg[0] === "login") return <AuthView mode="login" />;
   if (seg[0] === "register") return <AuthView mode="register" />;
   if (seg[0] === "account") return <AccountView />;
   if (seg[0] === "order" && seg[1]) return <OrderView id={seg[1]} />;
+  if (seg[0] === "track") return <TrackView />;
   if (seg[0] === "page" && seg[1]) return <PageView slug={seg[1]} />;
   if (seg[0] === "admin")
     return <AdminView initialTab={route.query.get("tab") ?? "dashboard"} />;
@@ -81,7 +104,7 @@ function MobileBottomNav({ path }: { path: string }) {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 z-40 lg:hidden border-t border-border/60 bg-background/90 backdrop-blur-lg"
+      className="fixed bottom-0 inset-x-0 z-40 lg:hidden border-t border-border/60 bg-background/90 backdrop-blur-lg print:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="ناوبری موبایل"
     >
@@ -113,6 +136,34 @@ function MobileBottomNav({ path }: { path: string }) {
         })}
       </div>
     </nav>
+  );
+}
+
+function BackToTop() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShow(window.scrollY > 500);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.button
+          key="backtotop"
+          initial={{ opacity: 0, scale: 0.8, y: 8 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 8 }}
+          transition={{ duration: 0.15 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-20 lg:bottom-6 left-4 z-40 grid place-items-center size-10 rounded-full glass border-brand/40 text-brand hover:bg-brand/15 shadow-lg print:hidden"
+          aria-label="بازگشت به بالای صفحه"
+        >
+          <ArrowUp className="size-4.5" />
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -148,6 +199,7 @@ function StoreShell() {
     useAuth.persist.rehydrate();
     useCompare.persist.rehydrate();
     useRecentlyViewed.persist.rehydrate();
+    useWishlist.persist.rehydrate();
   }, []);
 
   return (
@@ -170,6 +222,7 @@ function StoreShell() {
 
       <SiteFooter />
       <MobileBottomNav path={route.path} />
+      <BackToTop />
     </div>
   );
 }

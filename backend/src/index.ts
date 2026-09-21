@@ -1,10 +1,12 @@
 /**
  * Yassaei Electronics — split backend service.
- * Standalone Bun HTTP server on port 4000 (env PORT), JSON-file storage.
+ * Standalone Bun HTTP server on port 4000 (env PORT).
+ * Storage: PostgreSQL (Bun SQL) when reachable, JSON-file fallback otherwise.
  */
 import type { Route, RouteCtx } from './types';
-import { HOST, PORT } from './config';
+import { DATABASE_URL, DATABASE_URL_IGNORED, HOST, PG_DISABLED, PORT } from './config';
 import { Store } from './db';
+import { PgDriver } from './db-pg';
 import { HttpError, json } from './util';
 
 import {
@@ -21,24 +23,61 @@ import {
 import { login, me, register } from './routes/auth';
 import {
   cartValidate,
+  BULK_TIERS,
   couponValidate,
   createOrder,
   createReview,
   getOrder,
   listMyOrders,
+  trackOrder,
 } from './routes/shop';
 import {
   adminCreateProduct,
   adminDeleteProduct,
+  adminGetSettings,
   adminListOrders,
   adminListProducts,
   adminListUsers,
   adminPatchOrder,
   adminPatchProduct,
+  adminPatchSettings,
   adminStats,
 } from './routes/admin';
+import {
+  adminAnswerQuestion,
+  adminDeleteQuestion,
+  adminListQuestions,
+  adminQuestionsCount,
+  createQuestion,
+  getProductQuestions,
+  voteQuestion,
+} from './routes/questions';
 
 const store = new Store();
+
+/* ---------- PostgreSQL (optional — JSON-file fallback) ---------- */
+
+if (PG_DISABLED) {
+  console.log('[pg] PG_DISABLED=1 — using JSON-file store');
+} else {
+  if (DATABASE_URL_IGNORED) {
+    console.warn(
+      `[pg] ignoring DATABASE_URL="${DATABASE_URL_IGNORED}" — not a PostgreSQL URL (set PG_URL to override)`,
+    );
+  }
+  try {
+    const pg = new PgDriver(DATABASE_URL);
+    await pg.probe();
+    await pg.ensureSchema();
+    await store.attachDriver(pg);
+    console.log(`[pg] PostgreSQL attached (${DATABASE_URL.replace(/:\/\/[^@]*@/, '://***@')})`);
+  } catch (err) {
+    console.warn(
+      '[pg] PostgreSQL unavailable — continuing with JSON-file store:',
+      err instanceof Error ? err.message : err,
+    );
+  }
+}
 
 /** Robust HttpError detection (survives --hot module-generation mismatches). */
 function isHttpError(err: unknown): err is HttpError {
@@ -56,7 +95,13 @@ function isHttpError(err: unknown): err is HttpError {
 const routes: Route[] = [
   // public
   { method: 'GET', pattern: /^\/healthz$/, handler: () => json({ ok: true }) },
+  {
+    method: 'GET',
+    pattern: /^\/api\/health$/,
+    handler: async () => json({ ok: true, store: store.driverName, db: await store.describe() }),
+  },
   { method: 'GET', pattern: /^\/api\/settings$/, handler: () => getSettings(store) },
+  { method: 'GET', pattern: /^\/api\/bulk-tiers$/, handler: () => json({ tiers: BULK_TIERS }) },
   { method: 'GET', pattern: /^\/api\/home$/, handler: () => getHome(store) },
   { method: 'GET', pattern: /^\/api\/categories$/, handler: () => getCategories(store) },
   { method: 'GET', pattern: /^\/api\/brands$/, handler: () => getBrands(store) },
@@ -96,6 +141,7 @@ const routes: Route[] = [
   { method: 'POST', pattern: /^\/api\/coupon\/validate$/, handler: (c) => couponValidate(store, c.req) },
   { method: 'POST', pattern: /^\/api\/orders$/, handler: (c) => createOrder(store, c.req) },
   { method: 'GET', pattern: /^\/api\/orders$/, handler: (c) => listMyOrders(store, c.req) },
+  { method: 'POST', pattern: /^\/api\/orders\/track$/, handler: (c) => trackOrder(store, c.req) },
   {
     method: 'GET',
     pattern: /^\/api\/orders\/(?<id>[^/]+)$/,
@@ -103,8 +149,27 @@ const routes: Route[] = [
   },
   { method: 'POST', pattern: /^\/api\/reviews$/, handler: (c) => createReview(store, c.req) },
 
+  // product Q&A
+  {
+    method: 'GET',
+    pattern: /^\/api\/products\/(?<id>[^/]+)\/questions$/,
+    handler: (c: RouteCtx) => getProductQuestions(store, c.params.id ?? ''),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/products\/(?<id>[^/]+)\/questions$/,
+    handler: (c: RouteCtx) => createQuestion(store, c.req, c.params.id ?? ''),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/questions\/(?<id>[^/]+)\/vote$/,
+    handler: (c: RouteCtx) => voteQuestion(store, c.req, c.params.id ?? ''),
+  },
+
   // admin
   { method: 'GET', pattern: /^\/api\/admin\/stats$/, handler: (c) => adminStats(store, c.req) },
+  { method: 'GET', pattern: /^\/api\/admin\/settings$/, handler: (c) => adminGetSettings(store, c.req) },
+  { method: 'PATCH', pattern: /^\/api\/admin\/settings$/, handler: (c) => adminPatchSettings(store, c.req) },
   {
     method: 'GET',
     pattern: /^\/api\/admin\/products$/,
@@ -136,6 +201,26 @@ const routes: Route[] = [
     handler: (c) => adminPatchOrder(store, c.req, c.params.id ?? ''),
   },
   { method: 'GET', pattern: /^\/api\/admin\/users$/, handler: (c) => adminListUsers(store, c.req) },
+  {
+    method: 'GET',
+    pattern: /^\/api\/admin\/questions$/,
+    handler: (c: RouteCtx) => adminListQuestions(store, c.req, c.url),
+  },
+  {
+    method: 'GET',
+    pattern: /^\/api\/admin\/questions\/count$/,
+    handler: (c) => adminQuestionsCount(store, c.req),
+  },
+  {
+    method: 'PATCH',
+    pattern: /^\/api\/admin\/questions\/(?<id>[^/]+)$/,
+    handler: (c: RouteCtx) => adminAnswerQuestion(store, c.req, c.params.id ?? ''),
+  },
+  {
+    method: 'DELETE',
+    pattern: /^\/api\/admin\/questions\/(?<id>[^/]+)$/,
+    handler: (c: RouteCtx) => adminDeleteQuestion(store, c.req, c.params.id ?? ''),
+  },
 ];
 
 /* ---------- CORS ---------- */
@@ -203,17 +288,21 @@ const server = Bun.serve({
   },
 });
 
-function shutdown(): void {
+let shuttingDown = false;
+async function shutdown(): Promise<void> {
+  if (shuttingDown) return;
+  shuttingDown = true;
   console.log('[yassaei-backend] shutting down — flushing db…');
   try {
-    store.flushSync();
+    await Promise.race([store.shutdown(), new Promise((r) => setTimeout(r, 3000))]);
   } finally {
     process.exit(0);
   }
 }
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
+process.on('SIGINT', () => void shutdown());
+process.on('SIGTERM', () => void shutdown());
 
 console.log(
-  `[yassaei-backend] listening on http://${HOST}:${server.port} — db: ${store.db.products.length} products, ${store.db.users.length} users`,
+  `[yassaei-backend] listening on http://${HOST}:${server.port} — store: ${store.driverName}, ` +
+    `db: ${store.db.products.length} products, ${store.db.users.length} users`,
 );

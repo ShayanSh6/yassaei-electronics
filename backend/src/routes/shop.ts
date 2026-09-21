@@ -1,11 +1,12 @@
 /** Shop routes: cart validation, coupons, orders (guest or authed), reviews. */
-import type { Coupon, Order, OrderItem, ShippingMethod, PaymentMethod } from '../types';
+import type { BulkTier, Coupon, Order, OrderItem, ShippingMethod, PaymentMethod } from '../types';
 import type { Store } from '../db';
 import { optionalUser, requireUser } from '../auth';
 import {
   HttpError,
   int,
   json,
+  normalizeDigits,
   nowISO,
   num,
   randomHex,
@@ -17,6 +18,75 @@ import {
 export const PEYK_COST = 80_000;
 export const POST_COST = 120_000;
 export const FREE_POST_THRESHOLD = 2_000_000;
+
+/** Quantity-tier wholesale discounts (buy ≥ minQty units of one product → percent% off). */
+export const BULK_TIERS: BulkTier[] = [
+  { minQty: 5, percent: 3 },
+  { minQty: 10, percent: 7 },
+  { minQty: 25, percent: 12 },
+];
+
+/** Highest tier reached for a quantity (null when below the first tier). */
+export function bulkTierFor(qty: number, tiers: BulkTier[] = BULK_TIERS): BulkTier | null {
+  let hit: BulkTier | null = null;
+  for (const t of tiers) {
+    if (qty >= t.minQty) hit = t;
+  }
+  return hit;
+}
+
+/** Effective unit price after the bulk tier for `qty` (rounded down to whole Toman).
+ *  `override` = per-product tiers (product.bulkTiers) — falls back to global tiers. */
+export function bulkUnitPrice(
+  price: number,
+  qty: number,
+  override?: BulkTier[] | null,
+): { unitPrice: number; percent: number } {
+  const tiers = validTiers(override) ?? BULK_TIERS;
+  const tier = bulkTierFor(qty, tiers);
+  if (!tier) return { unitPrice: price, percent: 0 };
+  return { unitPrice: Math.floor((price * (100 - tier.percent)) / 100), percent: tier.percent };
+}
+
+/** Shape-check an untrusted tiers array (used for product.bulkTiers lookups). */
+function validTiers(tiers: BulkTier[] | null | undefined): BulkTier[] | null {
+  if (!Array.isArray(tiers) || tiers.length === 0) return null;
+  return tiers.every(
+    (t) =>
+      t && typeof t === 'object' && typeof t.minQty === 'number' && Number.isFinite(t.minQty) &&
+      typeof t.percent === 'number' && Number.isFinite(t.percent),
+  )
+    ? tiers
+    : null;
+}
+
+/** Validate + normalize a per-product bulk-tier override from an admin request.
+ *  - field absent           → undefined (keep existing)
+ *  - null / empty array     → null (clear override → use global tiers)
+ *  - valid array            → normalized tiers (2–90% off, minQty ≥ 2, ascending, ≤ 4 rows) */
+export function sanitizeBulkTiers(input: unknown): BulkTier[] | null | undefined {
+  if (input === undefined) return undefined;
+  if (input === null) return null;
+  if (!Array.isArray(input)) throw new HttpError(400, 'پله‌های تخفیف عمده نامعتبر است');
+  if (input.length === 0) return null;
+  if (input.length > 4) throw new HttpError(400, 'حداکثر ۴ پله تخفیف عمده مجاز است');
+  const tiers: BulkTier[] = [];
+  for (const raw of input as Array<Record<string, unknown>>) {
+    if (!raw || typeof raw !== 'object') throw new HttpError(400, 'پله‌های تخفیف عمده نامعتبر است');
+    const minQty = int(raw.minQty);
+    const percent = int(raw.percent);
+    if (minQty === undefined || minQty < 2) throw new HttpError(400, 'حداقل تعداد هر پله باید ۲ یا بیشتر باشد');
+    if (percent === undefined || percent < 1 || percent > 90) throw new HttpError(400, 'درصد تخفیف هر پله باید بین ۱ تا ۹۰ باشد');
+    tiers.push({ minQty, percent });
+  }
+  tiers.sort((a, b) => a.minQty - b.minQty);
+  for (let i = 1; i < tiers.length; i++) {
+    if (tiers[i].minQty === tiers[i - 1].minQty) {
+      throw new HttpError(400, 'حداقل تعداد پله‌ها باید متفاوت باشد');
+    }
+  }
+  return tiers;
+}
 
 const SHIPPING_METHODS: ShippingMethod[] = ['post', 'peyk', 'pickup'];
 const PAYMENT_METHODS: PaymentMethod[] = ['online', 'cod'];
@@ -46,12 +116,15 @@ export async function cartValidate(store: Store, req: Request): Promise<Response
   const requested = parseItems(body);
 
   const items = [];
-  let subtotal = 0;
+  let subtotal = 0; // after bulk-tier discounts
+  let listTotal = 0; // before bulk-tier discounts
   for (const { id, qty } of requested) {
     const p = store.db.products.find((x) => x.id === id);
     if (!p || p.active === false) continue; // drop unknown / inactive
     const clampedQty = Math.max(0, Math.min(qty, p.stock));
-    subtotal += p.price * clampedQty;
+    const { unitPrice, percent } = bulkUnitPrice(p.price, clampedQty, p.bulkTiers);
+    subtotal += unitPrice * clampedQty;
+    listTotal += p.price * clampedQty;
     items.push({
       id: p.id,
       name: p.name,
@@ -60,9 +133,11 @@ export async function cartValidate(store: Store, req: Request): Promise<Response
       qty: clampedQty,
       image: p.images[0] ?? '',
       active: true,
+      unitPrice,
+      bulkPercent: percent,
     });
   }
-  return json({ items, subtotal });
+  return json({ items, subtotal, bulkDiscount: listTotal - subtotal });
 }
 
 /* ---------- coupons ---------- */
@@ -154,16 +229,28 @@ export async function createOrder(store: Store, req: Request): Promise<Response>
     if (requested.length === 0) throw new HttpError(400, 'سبد سفارش خالی است');
 
     const items: OrderItem[] = [];
-    let subtotal = 0;
+    let subtotal = 0; // after bulk-tier discounts
+    let listTotal = 0; // before bulk-tier discounts
     for (const { id, qty } of requested) {
       const p = db.products.find((x) => x.id === id);
       if (!p || p.active === false) throw new HttpError(400, `محصول ${id} در فروشگاه موجود نیست`);
       if (qty > p.stock) {
         throw new HttpError(400, `موجودی «${p.name}» کافی نیست (موجودی: ${p.stock})`);
       }
-      items.push({ id: p.id, name: p.name, price: p.price, qty, image: p.images[0] ?? '' });
-      subtotal += p.price * qty;
+      const { unitPrice, percent } = bulkUnitPrice(p.price, qty, p.bulkTiers);
+      items.push({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        qty,
+        image: p.images[0] ?? '',
+        unitPrice,
+        bulkPercent: percent,
+      });
+      subtotal += unitPrice * qty;
+      listTotal += p.price * qty;
     }
+    const bulkDiscount = listTotal - subtotal;
 
     let discount = 0;
     let usedCouponCode: string | null = null;
@@ -185,6 +272,7 @@ export async function createOrder(store: Store, req: Request): Promise<Response>
       p.updatedAt = nowISO();
     }
 
+    const createdAt = nowISO();
     const o: Order = {
       id,
       code,
@@ -197,9 +285,11 @@ export async function createOrder(store: Store, req: Request): Promise<Response>
       customer,
       shipping,
       payment,
-      createdAt: nowISO(),
+      createdAt,
       userId: user ? user.id : null,
       couponCode: usedCouponCode,
+      bulkDiscount,
+      statusHistory: [{ status: 'pending', at: createdAt }],
     };
     db.orders.push(o);
     return o;
@@ -225,6 +315,28 @@ export function getOrder(store: Store, req: Request, id: string): Response {
     const user = requireUser(store, req);
     const isAdmin = user.role === 'owner' || user.role === 'staff';
     if (!isAdmin && order.userId !== user.id) throw new HttpError(403, 'دسترسی غیرمجاز');
+  }
+  return json({ order });
+}
+
+/** Guest order tracking: order code + the phone used at checkout must both match. */
+export async function trackOrder(store: Store, req: Request): Promise<Response> {
+  const body = await readJson(req);
+  const code = str(body.code).trim().toUpperCase();
+  const phone = normalizeDigits(str(body.phone)).replace(/\D/g, '');
+  if (!code) throw new HttpError(400, 'کد سفارش را وارد کنید');
+  if (phone.length < 4) throw new HttpError(400, 'شماره تماس هنگام ثبت سفارش را وارد کنید');
+
+  const order = store.db.orders.find(
+    (o) => o.code === code || o.id === code.replace(/^#/, ''),
+  );
+  if (!order) throw new HttpError(404, 'سفارشی با این کد یافت نشد');
+
+  // strip leading country code / zero for a tolerant last-digits comparison
+  const orderPhone = normalizeDigits(order.customer.phone).replace(/\D/g, '');
+  const trim = (p: string) => (p.length > 10 ? p.slice(-10) : p);
+  if (trim(orderPhone) !== trim(phone)) {
+    throw new HttpError(403, 'شماره تماس با این سفارش مطابقت ندارد');
   }
   return json({ order });
 }

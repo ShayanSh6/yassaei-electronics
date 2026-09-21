@@ -1,5 +1,5 @@
 // ── Hash router: parse `#/path?query` into route + params ──
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 
 export interface RouteInfo {
   path: string;          // e.g. "/product/ys-001"
@@ -92,6 +92,16 @@ const FA_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
 
 export function toFa(input: string | number): string {
   return String(input).replace(/\d/g, (d) => FA_DIGITS[Number(d)]);
+}
+
+const BASE_TITLE = "یاسایی | فروشگاه قطعات الکترونیک و لوازم الکتریکی تهران";
+
+/** Set the browser tab title for the current view (SSR-safe, no-op until mount). */
+export function usePageTitle(title?: string | null) {
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.title = title ? `${title} | یاسایی الکترونیک` : BASE_TITLE;
+  }, [title]);
 }
 
 export function toEnDigits(input: string): string {
