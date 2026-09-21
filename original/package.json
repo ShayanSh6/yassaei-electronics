@@ -1,0 +1,21 @@
+{
+  "name": "yassaei-electronics",
+  "version": "1.0.0",
+  "private": true,
+  "description": "فروشگاه الکتریکی یاسایی تهران — سرور Node بدون وابستگی + SPA",
+  "type": "module",
+  "scripts": {
+    "start": "npm run build && node server/main.mjs",
+    "test": "node tests/api.mjs",
+    "build": "npx esbuild public/js/main.mjs --bundle --minify --format=esm --target=es2017 --outfile=public/bundle/main.js",
+    "verify": "node tests/verify.mjs",
+    "bump": "node tools/bump-build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "esbuild": "^0.24.2",
+    "jsdom": "^29.1.1"
+  }
+}

@@ -1,0 +1,21 @@
+# ── Yassaei Electronics — Split Backend (Bun, port 4000) ──
+# Build from repo root:  docker build -f Dockerfile.backend -t yassaei-backend ./backend
+
+FROM oven/bun:1-slim AS runner
+WORKDIR /app
+
+# no external dependencies — just copy source
+COPY backend/package.json backend/tsconfig.json ./
+COPY backend/src ./src
+
+# seed data is copied at build; mount a volume to persist runtime changes
+COPY backend/data ./data
+
+ENV NODE_ENV=production
+ENV PORT=4000
+ENV ADMIN_PASSWORD=Yassaei@1404
+
+EXPOSE 4000
+VOLUME ["/app/data"]
+
+CMD ["bun", "src/index.ts"]

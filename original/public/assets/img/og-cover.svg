@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08131f"/><stop offset=".55" stop-color="#0a1b2b"/><stop offset="1" stop-color="#071522"/>
+    </linearGradient>
+    <linearGradient id="ac" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#7fd3ec"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".8" cy=".2" r=".8">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity=".28"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g fill="none" stroke="#f59e0b" stroke-opacity=".3" stroke-width="3">
+    <path d="M0 520c80-18 160 16 240 0s160-32 240-16 160 32 240 16 160-32 240-16 160 32 240 16"/>
+    <path d="M0 560c80-16 160 14 240 0s160-28 240-14 160 28 240 14 160-28 240-14 160 28 240 14"/>
+  </g>
+  <g fill="#f59e0b" fill-opacity=".14">
+    <path d="M0 596c160-20 320 12 480 0s320-26 480-12 160 22 240 12v34H0z"/>
+  </g>
+  <g transform="translate(880 330)" stroke="#7fd3ec" stroke-opacity=".5" stroke-width="4" fill="none">
+    <path d="M0 96c22 16 100 16 124 0l-12-30H12z" fill="#f59e0b" fill-opacity=".16"/>
+    <path d="M62 66V-40M62-40c30 10 46 34 50 62H62M62-26c-22 8-36 26-38 48h38"/>
+  </g>
+  <g transform="translate(90 90)">
+    <rect width="96" height="96" rx="26" fill="url(#ac)"/>
+    <path d="M14 62c6.4 0 6.4-6 12.8-6s6.4 6 12.8 6 6.4-6 12.8-6 6.4 6 12.8 6 6.4-6 12.8-6" fill="none" stroke="#04222c" stroke-width="4.4" stroke-linecap="round" opacity=".9"/>
+    <path d="M14 74c6.4 0 6.4-6 12.8-6s6.4 6 12.8 6 6.4-6 12.8-6 6.4 6 12.8 6 6.4-6 12.8-6" fill="none" stroke="#04222c" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+    <rect x="36" y="16" width="24" height="38" rx="6.4" fill="#04222c"/>
+    <rect x="40" y="22" width="16" height="22" rx="3" fill="#7fd3ec"/>
+  </g>
+  <text x="90" y="268" font-family="Vazirmatn, Tahoma, sans-serif" font-size="64" font-weight="800" fill="#e9eff8">الکتریکی یاسایی</text>
+  <text x="90" y="318" font-family="Vazirmatn, Tahoma, sans-serif" font-size="28" fill="#8fa1ba">قطعات الکترونیک و لوازم الکتریکی؛ تهران (نارمک، هفت‌حوض)</text>
+  <text x="90" y="404" font-family="Segoe UI, sans-serif" font-size="26" font-weight="700" fill="#f59e0b" letter-spacing="4">YASSAEI ELECTRONICS · TEHRAN</text>
+  <g font-family="Vazirmatn, Tahoma, sans-serif" font-size="24" fill="#c3d0e2">
+    <g transform="translate(90 470)"><circle cx="10" cy="-8" r="7" fill="#f59e0b"/><text x="30" y="0">ضمانت اصالت کالا</text></g>
+    <g transform="translate(330 470)"><circle cx="10" cy="-8" r="7" fill="#f59e0b"/><text x="30" y="0">مهلت انصراف ۷ روزه</text></g>
+    <g transform="translate(620 470)"><circle cx="10" cy="-8" r="7" fill="#f59e0b"/><text x="30" y="0">ارسال به سراسر ایران</text></g>
+  </g>
+</svg>

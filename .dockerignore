@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+backend/node_modules
+backend/backend.log
+backend/data/db.json
+dev.log
+server.log
+download
+examples
+tests
+worklog.md
+agent-ctx
+*.md
+!docker/README.md

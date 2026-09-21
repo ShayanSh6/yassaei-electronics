@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 244 244" width="244" height="244" role="img" aria-label="product">
+  <defs>
+    <linearGradient id="g" gradientTransform="rotate(111 .5 .5)">
+      <stop offset="0" stop-color="#818cf8"/><stop offset="1" stop-color="#3730a3"/>
+    </linearGradient>
+    <radialGradient id="s" cx=".3" cy=".2" r=".9">
+      <stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="244" height="244" rx="30" fill="url(#g)"/>
+  <rect width="244" height="244" rx="30" fill="url(#s)"/>
+  <g opacity=".95"><rect x="86" y="72" width="72" height="88" rx="20" fill="none" stroke="#fff" stroke-width="9"/>
+    <path d="M104 72V44h36v28M104 160v28h36v-28" fill="none" stroke="#fff" stroke-width="9" stroke-linejoin="round"/>
+    <circle cx="122" cy="116" r="18" fill="none" stroke="#fff" stroke-width="7"/>
+    <path d="M122 106v10l8 6" stroke="#fff" stroke-width="6" stroke-linecap="round"/></g>
+  <text x="122" y="228" text-anchor="middle" font-family="system-ui,Segoe UI,Arial" font-size="15" font-weight="700" fill="#fff" opacity=".82" letter-spacing="1.4">XIAOMI</text>
+</svg>

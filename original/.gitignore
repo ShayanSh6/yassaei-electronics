@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+data/backups/
+data/secret.key
+.env
+data/db.tmp.json
+data/db.backup.json
+data/backup-*.json
+# تنظیمات سفارشی مدیر — پایدار در برابر git pull / deploy
+data/custom-settings.json
+data/custom-settings.json.tmp
+data/bans/

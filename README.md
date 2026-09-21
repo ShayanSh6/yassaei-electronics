@@ -1,93 +1,94 @@
-# Yassaei Electronics — الکتریکی و قطعات الکترونیک یاسایی تهران ⚡
+# Yassaei Electronics — Rebuilt (Next.js + Split Backend + Docker)
 
-**Yassaei Electronics** is a high-performance, zero-dependency e-commerce platform custom-built for an electronics & electrical-supplies store in Tehran (Narmak, 7-Hoz).
-**فروشگاه یاسایی** یک پلتفرم فروشگاهی فوق‌سریع و کاملاً سبک است که اختصاصاً برای فروشگاه قطعات الکترونیک و لوازم الکتریکی در محله هفت‌حوض تهران توسعه یافته است.
+A full rebuild of [ShayanSh6/yassaei-electronics](https://github.com/ShayanSh6/yassaei-electronics):
+a Persian RTL electronics e-commerce store. The original vanilla-JS SPA + zero-dependency
+Node server has been split into a **standalone backend service** and a **Next.js 16 frontend**,
+fully containerized with Docker.
 
-> 🏷️ **نسخه رسمی: `v1.0.0`** — منتشرشده به‌عنوان اولین Release رسمی روی GitHub
-> (همراه با فایل تک‌فایلی آفلاین `yassaei-offline.html` در Assets).
-> 🗓️ **تاریخ رسمی انتشار (هجری شمسی): شهریور ۱۴۰۵ — 1405 SH** · آخرین به‌روزرسانی مستندات و
-> لایهٔ امنیتی: **شهریور ۱۴۰۵ هجری شمسی**.
+## What's inside
 
-## 🌟 Features (امکانات اصلی)
-
-### هسته فروشگاه
-- 🚀 **Ultra-Fast & Offline Ready (PWA)** — دسترسی آفلاین و سرعت فوق‌العاده با Service Worker و پیش‌کش پوسته/داده.
-- 💾 **In-Memory JSON Database** — دیتابیس بومی `data/db.json` با نوشتن اتمیک، تراکنش سریال، بکاپ خودکار و بازیابی از خرابی (بدون هیچ دیتابیس خارجی).
-- 🖨️ **POS & Invoice Generator** — فاکتورساز لحظه‌ای با پرینت استاندارد (جداسازی لایه چاپ از پنل، ابعاد کاغذ، کد ملی/اقتصادی فروشنده).
-- 🛡️ **Anti-DDoS & Rate Limiting** — بن IP، محدودساز نرخ چندلایه، اتاق انتظار نوبت‌دهی با گذرنامه HMAC و سنجه بار.
-- 🤖 **Telegram Bot Integration** — بات پشتیبانی با وب‌هوک (+فال‌بک long-poll): وضعیت سفارش، جست‌وجوی کالا، صندوق پیام مدیر، پخش همگانی.
-- 🎨 **Vanilla JS Frontend** — SPA وانیلا با مسیریاب هش‌محور، دوزبانه (فارسی RTL/انگلیسی)، دو پوسته رنگی و دو پوسته ظاهری (تازه/کلاسیک).
-
-### ابزارهای فروش حرفه‌ای (پنل ← تنظیمات ← ابزارهای فروش)
-- 📱 **WhatsApp** — دکمه «مشاورهٔ فنی در واتساپ» در صفحه کالا + دکمه ارسال فیش پرداخت در واتساپ پس از پرداخت؛ شماره از تنظیمات (اختصاصی واتساپ ← شبکه‌های اجتماعی ← موبایل/تلفن فروشگاه) با نرمال‌سازی خودکار به `wa.me`.
-- 🧾 **Proforma (پیش‌فاکتور رسمی)** — «دریافت پیش‌فاکتور رسمی» در سبد خرید با شماره خودکار فرمت `PF-۱۴۰۵۰۶۲۸-XXXXX` (تاریخ شمسی + دنباله یکتا) و چاپ مستقل.
-- 📊 **Smart Rolling Ceiling (سقف خرید هوشمند غلتان)** — مجموع خریدهای **موفق/پرداخت‌شده** کاربر در بازهٔ ۴۸ ساعت شمارش می‌شود و از سقف (پیش‌فرض ۱۰۰ میلیون تومان) کم می‌شود؛ سفارش لغوشده/پرداخت‌نشده هرگز شمرده نمی‌شود، محرومیت دائم وجود ندارد و با اسلاید بازه، سهمیه خودبه‌خود برمی‌گردد. کلید/مبلغ/بازه از «تنظیمات ← سفارش و پرداخت». به‌علاوه یک سقف روزانه بر پایهٔ اثر انگشت دستگاه و کارت/شبا برای کنترل سیلاب سفارش.
-- 💳 **کارت‌به‌کارت / Bank Card** — نمایش شبا و شماره کارت در صفحه پرداخت و فاکتور + نوار پیشرفت «تا ارسال رایگان» + نوار خرید چسبان موبایل.
-
-### تعامل تیم و مشتریان
-- 💬 **Team Chat (چت داخلی تیم)** — گفت‌وگوی اختصاصی مدیر و کارمندان: پیام + پیوست (تصویر/PDF)، `@mention` با تکمیل خودکار، ارجاع کلیک‌شدنی به `#order/#product/#ticket/#user`، دریافت زنده با SSE، قابل خاموش‌شدن از کلید امکانات پنل.
-- 🧑‍💼 **Careers (استخدام)** — صفحه عمومی فرصت‌های شغلی (`#/careers`) با فرم درخواست (رزومه اختیاری، ضدتکراری، محدودساز نرخ) + پنل مدیریت کامل (ثبت/ویرایش/بایگانی فرصت‌ها، وضعیت درخواست‌ها: pending/…) + اعلان لحظه‌ای به تیم.
-- 🎛️ **Admin Layout Manager (مدیریت چیدمان)** — چیدمان صفحه اصلی با کشیدن‌ورهاکردن (Drag & Drop): هیرو، شگفت‌انگیز، پرفروش‌ها، دست‌دوم‌ها، «چرا ما»، آمار زنده، بنر پلاس، خرید دست‌دوم، نقشه فروشگاه و … با امکان **مخفی‌کردن هر بخش** + ویرایشگر منوهای پنل مدیریت، منوی کاربری و نوار موبایل از مسیر `#/admin/layout`.
-
-### عملیات و اطمینان
-- 🧯 **Emergency Unban Tool** — اگر روزی بن خودکار، پنل را هم قفل کرد:
-  `node tools/unban-owner.mjs <phone_or_username>`
-  فقط قفل‌های امنیتیِ شناسهٔ مالک پاک و نقش `owner` بازیابی می‌شود؛ **داده، سفارش و موجودی هرگز حذف نمی‌شوند** و عملیات در ممیزی ثبت می‌شود.
-- 📴 **Offline Standalone Build** — کل سایت (فروشگاه + پنل مدیر) در یک فایل `yassaei-offline.html` با داده دمو در `localStorage` مرورگر؛ بازسازی با `node tools/standalone-build.mjs` (بدون هیچ راز/دادهٔ واقعی — جاروب خودکار).
-- 🛡️ **محافظت در برابر Inspect و برداشت کد** — منوی کلیک راست روی عناصر صفحه بسته است، میان‌برهای DevTools (`F12`، `Ctrl+Shift+I/J/C` و `Cmd+Opt+I/J/C`، `Ctrl+U`) مسدود می‌شود، هشدار امنیتی برجسته در کنسول مرورگر چاپ می‌شود و تصاویر کالا کشیده نمی‌شوند. تایپ/انتخاب متن در فیلدهای ورودی، جست‌وجو، فرم‌ها و لمس موبایل **کاملاً دست‌نخورده** است و کلید خاموش‌کردن آن از پنل مدیر → `#/admin/settings/security` در دسترس مدیر است (پیش‌فرض: روشن).
-- ✅ **100% Green Test Suite** — `npm run verify` با ۲۳ سوئیت مستقل روی سرور آزمایشی و دیتابیس جدا.
-
-## 🛠️ Setup (راه‌اندازی پروژه)
-
-```bash
-# 1. Install dependencies (فقط برای بیلد/تست؛ زمان اجرا صفر وابستگی است)
-npm install
-
-# 2. Build the frontend assets (باندل esbuild فرانت‌اند)
-npm run build
-
-# 3. Start the server (اجرای سرور — بدون build هم قابل اجراست)
-npm start        # = npm run build && node server/main.mjs
-# یا صرفاً: node server/main.mjs
+```
+.
+├── src/                  # Next.js 16 frontend (App Router, single "/" route, hash-routed SPA)
+│   ├── app/              #   layout (RTL, Vazirmatn font) + page.tsx shell
+│   ├── components/store/ #   header, footer, product cards, all 17 views (home, catalog,
+│   │                     #   product, cart, checkout, auth, account, orders, admin, pages…)
+│   └── lib/store/        #   api client, hash router, zustand cart/auth stores, types
+├── backend/              # SPLIT backend — standalone Bun service (zero npm deps), port 4000
+│   ├── src/              #   Bun.serve + routes/{catalog,auth,shop,admin}.ts + scrypt auth
+│   └── data/db.json      #   JSON-file DB, seeded: 121 products, 19 categories, 14 brands
+├── public/               # product/category/brand images + Vazirmatn fonts (from original repo)
+├── Dockerfile.frontend   # multi-stage Next.js build (standalone output, non-root)
+├── Dockerfile.backend    # bun runtime, /app/data volume for persistence
+├── docker-compose.yml    # frontend:3000 + backend:4000, healthcheck, named volume
+├── docker/README.md      # architecture notes
+├── original/             # the original cloned repo (for reference)
+└── worklog.md            # full development/verification log
 ```
 
-*The server starts on port 3000 by default (سرور پیش‌فرض روی پورت ۳۰۰۰).*
-حساب‌های نمونه: مدیر `admin / Yassaei@1404` — کارمند `staff / Staff@1404` — کاربران `maryam|reza|sina / Demo@1404` (در محیط واقعی عوضشان کنید).
-
-## 📦 نسخه آفلاین تک‌فایلی (Offline Standalone)
-
-| | |
-|---|---|
-| فایل | `yassaei-offline.html` (ریشهٔ ریپو، ≈۲٫۴ مگابایت — در Release رسمی هم ضمیمه است) |
-| بازسازی | `node tools/standalone-build.mjs` (خروجی: ۶۴ ماژول + ۱۰۹ دارایی درون‌خطی · ≈۲٫۴ مگابایت) |
-| کاربرد | اجرا/نمایش بدون هیچ سروری؛ فقط دوبار کلیک در کروم |
-| ورود دمو | رمز `Demo@1404` (داده بذر پاک‌سازی‌شده: بدون هش رمز، بدون توکن، بدون اطلاعات مشتری) |
-| ریست داده | DevTools → Application → Local Storage → حذف کلید و رفرش |
-
-## ✅ Verify (بررسی یک‌دستوری کل پروژه)
+## Quick start (Docker)
 
 ```bash
-npm run build      # باندل esbuild: public/js → public/bundle/main.js
-npm run verify     # سرور آزمایشی با دیتابیس جدا + همهٔ تست‌ها + جاروب رازها
-npm run bump       # تگ BUILD را در هر ۵ جا (state/sw/util + باندل + نسخهٔ آفلاین) هم‌گام جلو می‌برد
+docker compose up -d --build
+# frontend → http://localhost:3000
+# backend  → http://localhost:4000 (health: /healthz)
 ```
 
-`npm run verify` دادهٔ واقعی `data/db.json` را دست نمی‌زند (`--base=…` برای تست روی سرور در حال اجرا،
-`--fresh` برای seed تازه، `--keep` برای نگه‌داشتن پوشهٔ موقت).
+Data persists in the `yassaei-data` named volume across restarts.
 
-## 🔒 Security Notes (نکات امنیتی)
-- رمزها با **scrypt + salt** و نشست‌ها با کوکی `HttpOnly + SameSite` و CSRF دوطرفه؛ TOTP اختیاری.
-- پنل ادمین: محدودساز نرخ قدرتمند، ماتریس ~۲۰ مجوز، ممیزی کامل عملیات حساس.
-- **محافظت سمت کاربر (`settings.security.antiInspectEnabled`، پیش‌فرض روشن):** بستن کلیک راست،
-  مسدودسازی میان‌برهای DevTools/نمایش سورس، هشدار امنیتی در کنسول و جلوگیری از کشیدن تصاویر —
-  با کلید خاموش‌کردن از پنل مدیر → `#/admin/settings/security`. این لایه «بازدارنده» است
-  (کد سمت مرورگر هرگز «راز» نیست) و هیچ تعامل سالمی را نمی‌شکند.
-- نسخه آفلاین و فایل‌های عمومی هرگز توکن/هش/داده مشتری ندارند (جاروب خودکار `tools/secret-scan.mjs` در verify).
-- سقف خرید غلتان + سقف روزانه ضدسیلاب + مسدودسازی خودکار IP پرمراجعه.
+## Quick start (local dev, no Docker)
 
-## 📚 مستندات کامل (سه سند، سه مخاطب)
-| فایل | مخاطب | محتوا |
-|---|---|---|
-| `RAHNAMA-KAMEL.md` | صاحب کسب‌وکار/اپراتور | راهنمای «هر چیزی که باید بدانی»: اجرا، پنل، امنیت، بازیابی، انتشار |
-| `STRUCTURE.md` | توسعه‌دهنده | نقشهٔ کد: فایل‌ها، جریان داده، اندپوینت/صفحهٔ تازه، قراردادها |
-| `PROMPT-SAKHT-SITE.md` | هوش مصنوعی سازنده | پرامپت مادر برای بازتولید کل پلتفرم با کسب‌وکاری دیگر |
+Requires [Bun](https://bun.sh).
+
+```bash
+# 1) backend (terminal 1)
+cd backend
+bun install          # no deps, instant
+bun run dev          # http://localhost:4000
+
+# 2) frontend (terminal 2) — from repo root
+bun install
+bun run dev          # http://localhost:3000  (proxies /api/* → backend:4000)
+```
+
+> The frontend calls same-origin `/api/*`; `next.config.ts` rewrites it to
+> `${BACKEND_URL || http://127.0.0.1:4000}`. Override with `BACKEND_URL` env.
+
+## Admin account
+
+On first backend boot (empty users list) an owner account is created automatically:
+
+- username: `admin`
+- password: `Yassaei@1404` (override with `ADMIN_PASSWORD` env **before first boot**)
+
+Admin panel: `http://localhost:3000/#/admin` — dashboard, product management
+(create/edit/delete/featured), and order status workflow.
+
+## Feature highlights
+
+- 🛍 Catalog: categories, brands, filters (price/brand/stock), sorting, pagination, live search suggestions
+- 🛒 Cart with server-side validation, coupon codes (`YASSEI10`, `WELCOME`), free-shipping progress
+- 📦 Checkout: 3 shipping methods (post/peyk/pickup), online/COD payment, guest or logged-in orders
+- 👤 Auth: register/login (scrypt-hashed, bearer sessions), account page, order tracking
+- ⭐ Product reviews with rating aggregation
+- 🛠 Admin: stats dashboard, low-stock alerts, product CRUD, order status pipeline
+- 🌍 Full RTL Persian UI, dark theme, Toman prices, Persian digit formatting
+- 🐳 Complete Docker setup (compose, healthchecks, volumes, non-root containers)
+
+## Tech stack
+
+| Layer    | Tech |
+|----------|------|
+| Frontend | Next.js 16 (App Router), TypeScript 5, Tailwind CSS 4, shadcn/ui, Zustand, TanStack Query, Framer Motion, Lucide |
+| Backend  | Bun.serve, zero-dependency TypeScript, JSON-file DB with atomic writes, scrypt auth |
+| Docker   | docker-compose (2 services), multi-stage builds, healthchecks, named volumes |
+
+## API overview
+
+All endpoints under `/api/*` (see `backend/src/routes/` for details):
+
+- **Public**: `settings`, `home`, `categories`, `brands`, `products` (filter/sort/paginate),
+  `products/:id`, `search/suggest`, `pages/:slug`, `products/:id/reviews`
+- **Auth**: `auth/register`, `auth/login`, `auth/me`
+- **Shop**: `cart/validate`, `coupon/validate`, `orders` (create/list/detail), `reviews`
+- **Admin** (bearer, owner/staff): `admin/stats`, `admin/products` CRUD, `admin/orders`, `admin/users`
