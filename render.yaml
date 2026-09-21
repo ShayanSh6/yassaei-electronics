@@ -1,0 +1,11 @@
+# استقرار یک‌کلیکی روی Render.com (پلن رایگان)
+services:
+  - type: web
+    name: bander-mobile
+    runtime: node
+    plan: free
+    buildCommand: echo "zero-dependency — nothing to install"
+    startCommand: node server/main.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production

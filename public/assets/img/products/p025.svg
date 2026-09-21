@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 244 244" width="244" height="244" role="img" aria-label="product">
+  <defs>
+    <linearGradient id="g" gradientTransform="rotate(113 .5 .5)">
+      <stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+    <radialGradient id="s" cx=".3" cy=".2" r=".9">
+      <stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="244" height="244" rx="30" fill="url(#g)"/>
+  <rect width="244" height="244" rx="30" fill="url(#s)"/>
+  <g opacity=".95"><rect x="58" y="76" width="112" height="92" rx="16" fill="none" stroke="#fff" stroke-width="9"/>
+    <path d="M170 104h18a8 8 0 0 1 8 8v20a8 8 0 0 1-8 8h-18" fill="none" stroke="#fff" stroke-width="9"/>
+    <path d="M112 96l-20 36h26l-8 22 30-40h-24z" fill="#fff"/></g>
+  <text x="122" y="228" text-anchor="middle" font-family="system-ui,Segoe UI,Arial" font-size="15" font-weight="700" fill="#fff" opacity=".82" letter-spacing="1.4">GENERIC</text>
+</svg>

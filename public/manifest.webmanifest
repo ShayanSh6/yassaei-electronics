@@ -1,0 +1,31 @@
+{
+  "name": "الکتریکی یاسایی — فروشگاه قطعات الکترونیک و لوازم الکتریکی",
+  "short_name": "یاسایی",
+  "description": "خرید آنلاین قطعات برد، ابزار لحیم‌کاری، کابل و سیم، روشنایی و ملزومات الکتریکی از یاسایی تهران با ضمانت اصالت و ارسال به سراسر ایران.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "dir": "rtl",
+  "lang": "fa-IR",
+  "categories": ["shopping", "utilities"],
+  "theme_color": "#0b1220",
+  "background_color": "#060c15",
+  "icons": [
+    { "src": "/assets/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    { "name": "همهٔ محصولات", "short_name": "محصولات", "url": "/#/products", "icons": [{ "src": "/assets/img/icon-192.png", "sizes": "192x192" }] },
+    { "name": "تخفیف‌ها", "short_name": "تخفیف‌ها", "url": "/#/products?discount=1", "icons": [{ "src": "/assets/img/icon-192.png", "sizes": "192x192" }] },
+    { "name": "سبد خرید", "short_name": "سبد", "url": "/#/cart", "icons": [{ "src": "/assets/img/icon-192.png", "sizes": "192x192" }] },
+    { "name": "نمایش قیمت با بارکد", "short_name": "بارکد", "url": "/#/price-check", "icons": [{ "src": "/assets/img/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-mode="dark" data-port="on">
+<head>
+  <script>try{var lv=localStorage.getItem('ys_last_visit'),nw=Date.now();if(lv&&nw-parseInt(lv)>2592000000){localStorage.clear();sessionStorage.clear();}localStorage.setItem('ys_last_visit',nw.toString());}catch(e){}</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="description" content="یاسایی — فروشگاه تخصصی قطعات الکترونیک و لوازم الکتریکی در تهران (نارمک، هفت‌حوض): قطعات برد، ابزار لحیم‌کاری، کابل و سیم، روشنایی، شبکه، صوتی و تصویر با ضمانت اصالت و ارسال به سراسر ایران.">
+<meta name="robots" content="index, follow">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="یاسایی">
+<meta property="og:title" content="یاسایی | لوازم الکترونیک و الکتریکی">
+<meta property="og:description" content="خرید آنلاین قطعات الکترونیک و لوازم الکتریکی از تهران با ضمانت اصالت، مهلت تست ۷ روزه و ارسال به سراسر ایران.">
+<meta property="og:image" content="/assets/img/og-cover.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/assets/img/favicon.svg?v=ys-v130" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon.ico?v=ys-v130">
+<link rel="apple-touch-icon" href="/assets/img/icon-192.png">
+<link rel="stylesheet" href="/css/app.css?v=ys-v130">
+<title>یاسایی | فروشگاه لوازم الکترونیک و الکتریکی</title>
+  <script id="error-catcher">
+    window.addEventListener('error', function(e) {
+      var ws = document.getElementById('welcomeScreen');
+      if (ws) { ws.style.opacity = '0'; setTimeout(function(){ ws.parentNode.removeChild(ws); }, 500); }
+      var bs = document.getElementById('bootSplash');
+      if (!bs) return;
+      if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+        bs.innerHTML = '<div class="empty" style="color:#ef4444"><h4>خطا در بارگذاری</h4><p class="muted small" style="margin-top:8px">فایل‌های اصلی سایت بارگذاری نشد (احتمال قطعی اینترنت یا نسخه قدیمی).<br>لطفاً کش مرورگر را پاک کنید.</p><button class="btn btn-primary mt" onclick="try{localStorage.clear();sessionStorage.clear();}catch(e){}if(navigator.serviceWorker){navigator.serviceWorker.getRegistrations().then(function(r){for(var i=0;i<r.length;i++)r[i].unregister();window.location.reload(true);}).catch(function(){window.location.reload(true);})}else{window.location.reload(true);}">حذف کش و تلاش مجدد</button></div>';
+        return;
+      }
+      if (bs.innerHTML.indexOf('button') > -1) return;
+      bs.innerHTML = '<div class="empty" style="color:#ef4444"><h4>خطا در اجرای برنامه</h4><p class="muted small" style="direction:ltr;text-align:left;font-family:monospace;margin:10px 0;background:#1e1e1e;padding:10px;border-radius:6px;max-height:150px;overflow:auto;">' + (e.message || 'Unknown error') + '<br>' + (e.filename || '') + ':' + (e.lineno || '') + '</p><button class="btn btn-primary mt" onclick="window.location.reload(true)">تلاش مجدد</button><br><button class="btn btn-ghost mt-s" onclick="try{localStorage.clear();sessionStorage.clear();}catch(e){}if(navigator.serviceWorker){navigator.serviceWorker.getRegistrations().then(function(r){for(var i=0;i<r.length;i++)r[i].unregister();window.location.reload(true);}).catch(function(){window.location.reload(true);})}else{window.location.reload(true);}">حذف کش و تلاش مجدد</button></div>';
+    }, true);
+    window.addEventListener('unhandledrejection', function(e) {
+      var ws = document.getElementById('welcomeScreen');
+      if (ws) { ws.style.opacity = '0'; setTimeout(function(){ ws.parentNode.removeChild(ws); }, 500); }
+      var bs = document.getElementById('bootSplash');
+      if (bs && bs.innerHTML.indexOf('button') === -1) {
+         bs.innerHTML = '<div class="empty" style="color:#ef4444"><h4>خطای شبکه یا سرور</h4><p class="muted small" style="direction:ltr;text-align:left;font-family:monospace;margin:10px 0;background:#1e1e1e;padding:10px;border-radius:6px;max-height:150px;overflow:auto;">' + (e.reason ? (e.reason.message || e.reason) : 'Unknown promise rejection') + '</p><button class="btn btn-primary mt" onclick="window.location.reload(true)">تلاش مجدد</button></div>';
+      }
+    });
+  </script>
+</head>
+<body>
+<!-- ── صفحه خوش‌آمد: تا آماده‌شدن کامل سایت نمایش داده می‌شود، سپس محو می‌شود ── -->
+<div id="welcomeScreen" aria-hidden="true">
+  <div class="ws-card">
+    <svg class="ws-logo" viewBox="0 0 48 48" width="72" height="72" aria-hidden="true">
+      <defs><linearGradient id="wsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="lg-a" stop-color="#3dabff"/><stop offset="1" class="lg-b" stop-color="#1e8ae8"/></linearGradient></defs>
+      <rect x="1" y="1" width="46" height="46" rx="13" fill="url(#wsg)"/>
+      <path d="M18 10v4M24 10v4M30 10v4M18 34v4M24 34v4M30 34v4M10 18h4M10 24h4M10 30h4M34 18h4M34 24h4M34 30h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <rect x="14" y="14" width="20" height="20" rx="4.5" fill="#fff"/>
+  <path d="M25.5 18.5 20 26h3.6l-1.6 5.5L28 24h-3.6z" class="lg-bolt" fill="#1e8ae8"/></svg>
+    <b class="ws-name">یاسایی</b>
+    <span class="ws-tag">لوازم الکترونیک و الکتریکی</span>
+    <span class="ws-ring" aria-hidden="true"></span>
+  </div>
+</div>
+<a class="skip-link" href="#view" data-i18n="skip">پرش به محتوای اصلی</a>
+
+<!-- لایه‌های تزئینی پس‌زمینه (تهرانی) -->
+<div class="bg-layer" aria-hidden="true"></div>
+<div id="cursorHalo" aria-hidden="true"></div>
+<div class="port-deco" aria-hidden="true">
+  <svg viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice" focusable="false">
+    
+    <!-- 1. Default (نارمک) -->
+    <g class="deco-default">
+      <g fill="none" stroke="currentColor" stroke-opacity=".28" stroke-width="2">
+        <path d="M0 250c90-16 150 14 240 0s150-30 240-14 150 30 240 14 150-30 240-14 150 30 240 14 90-10 240 0"/>
+        <path d="M0 274c90-14 150 12 240 0s150-26 240-12 150 26 240 12 150-26 240-12 150 26 240 12 90-8 240 0"/>
+      </g>
+      <g fill="currentColor" fill-opacity=".16">
+        <path d="M0 296c120-18 240 10 360 0s240-24 360-12 240 26 360 14 240-20 360-8v50H0z"/>
+      </g>
+      <g transform="translate(178 196)" stroke="currentColor" stroke-opacity=".45" stroke-width="2.4" fill="none">
+        <path d="M0 44c16 12 74 12 92 0l-8-22H8z" fill="currentColor" fill-opacity=".14"/>
+        <path d="M46 22V-34M46-34c22 8 34 26 36 46H46M46-24c-16 6-26 20-28 36h28"/>
+        <path d="M-6 44h104"/>
+      </g>
+      <g transform="translate(1214 150)" stroke="currentColor" stroke-opacity=".4" stroke-width="2.6" fill="none">
+        <path d="M18 146c-6-46-4-84 6-112"/>
+        <path d="M24 34c-18-12-38-12-52-2 14-14 34-18 52-10M24 34c18-12 38-12 52-2-14-14-34-18-52-10M24 34c-8-20-2-40 10-52-4 18-2 36 4 50M24 34c10-18 28-26 44-22-16 4-30 14-38 28"/>
+      </g>
+    </g>
+
+    <!-- 2. Tehran Nights (آسمان‌خراش، ستاره و هلال ماه) -->
+    <g class="deco-tehran-nights">
+      <path d="M1200 80A40 40 0 1 0 1150 40 50 50 0 1 1 1200 80Z" fill="currentColor" fill-opacity="0.3"/>
+      <circle cx="200" cy="50" r="2" fill="currentColor" fill-opacity="0.5"/>
+      <circle cx="450" cy="120" r="1.5" fill="currentColor" fill-opacity="0.4"/>
+      <circle cx="800" cy="70" r="2.5" fill="currentColor" fill-opacity="0.6"/>
+      <path d="M0 320V200h30v-40h40v40h20v-80h50v80h20v-30h60v30h40v-60h50v60h100v-90h40v90h30v-50h60v50h120v-120h40v120h60v-40h50v40h40v-70h50v70h100v-40h50v40h40v-90h60v90h80v-30h50v30h50V320z" fill="currentColor" fill-opacity="0.1"/>
+      <!-- نور پنجره‌ها -->
+      <g fill="currentColor" fill-opacity="0.3">
+        <rect x="40" y="180" width="10" height="10"/><rect x="40" y="210" width="10" height="10"/>
+        <rect x="160" y="160" width="10" height="10"/><rect x="180" y="200" width="10" height="10"/>
+        <rect x="520" y="110" width="10" height="10"/><rect x="540" y="150" width="10" height="10"/>
+        <rect x="1100" y="180" width="10" height="10"/><rect x="1120" y="220" width="10" height="10"/>
+      </g>
+    </g>
+
+    <!-- 3. Milad (برج میلاد بسیار بزرگ و نزدیک) -->
+    <g class="deco-milad">
+      <path d="M0 320V260h40v-20h30v40h20v-50h60v50h20v-30h40v40h50v-60h30v80H0z M1100 320V250h40v-30h30v60h20v-40h50v60h20v-30h40v50H1100z" fill="currentColor" fill-opacity="0.06"/>
+      <g transform="translate(620 -50)" fill="currentColor" fill-opacity="0.15">
+        <path d="M80 370L70 180h60l-10 190z"/>
+        <path d="M50 180l20-60 30 0 20 60z"/>
+        <path d="M70 120l10-40h40l10 40z"/>
+        <path d="M98 80h4v-70h-4z"/>
+        <rect x="99" y="10" width="2" height="70" fill-opacity="0.4"/>
+        <path d="M60 180h80l-20 60h-40z" fill="none" stroke="currentColor" stroke-width="3" stroke-opacity="0.2"/>
+        <path d="M85 370l-30 0l20-130 M115 370l30 0l-20-130" stroke="currentColor" stroke-width="2" stroke-opacity="0.1" fill="none"/>
+      </g>
+    </g>
+
+    <!-- 4. Azadi (برج آزادی در مرکز با خطوط خیابان) -->
+    <g class="deco-azadi">
+      <path d="M0 320L400 280h640L1440 320" fill="none" stroke="currentColor" stroke-width="4" stroke-opacity="0.05"/>
+      <path d="M0 310L400 270h640L1440 310" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="10 15" stroke-opacity="0.1"/>
+      <g transform="translate(620 120)" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="3">
+        <path d="M60 200L80 40h40l20 160h-40l-10-80h-20l-10 80H60z" fill="currentColor" fill-opacity="0.12"/>
+        <path d="M80 200q20-100 40 0" stroke-width="4"/>
+        <path d="M80 40L100 20L120 40" stroke-width="3"/>
+        <path d="M60 190h80 M70 170h60" stroke-opacity="0.15"/>
+      </g>
+    </g>
+
+    <!-- 5. Lalehzar (چراغ‌خواب‌های کلاسیک، تابلوی سینما) -->
+    <g class="deco-lalehzar">
+      <path d="M0 320v-50h1440v50z" fill="currentColor" fill-opacity="0.04"/>
+      <!-- تابلوی سینما -->
+      <g transform="translate(300 150)" fill="none" stroke="currentColor" stroke-width="3" stroke-opacity="0.3">
+        <rect x="0" y="0" width="180" height="60" rx="4" fill="currentColor" fill-opacity="0.08"/>
+        <path d="M10 10h160v40H10z" stroke-width="1"/>
+        <circle cx="15" cy="15" r="2"/><circle cx="30" cy="15" r="2"/><circle cx="45" cy="15" r="2"/>
+        <circle cx="165" cy="15" r="2"/><circle cx="150" cy="15" r="2"/><circle cx="135" cy="15" r="2"/>
+        <circle cx="15" cy="45" r="2"/><circle cx="30" cy="45" r="2"/><circle cx="45" cy="45" r="2"/>
+        <circle cx="165" cy="45" r="2"/><circle cx="150" cy="45" r="2"/><circle cx="135" cy="45" r="2"/>
+        <path d="M60 30h60M60 40h40" stroke-width="4" stroke-opacity="0.4"/>
+      </g>
+      <!-- چراغ‌های خیابانی کلاسیک -->
+      <g stroke="currentColor" stroke-width="3" stroke-opacity="0.3" fill="none">
+        <path d="M150 320V120 M140 120q10-20 20 0z M145 105v15 M155 105v15"/>
+        <path d="M800 320V100 M790 100q10-20 20 0z M795 85v15 M805 85v15"/>
+        <path d="M1200 320V140 M1190 140q10-20 20 0z M1195 125v15 M1205 125v15"/>
+      </g>
+    </g>
+
+    <!-- 6. Tochal (کوهستان و تله‌کابین - قبلی حفظ و اصلاح شد) -->
+    <g class="deco-tochal">
+      <path d="M0 320L200 150l100 80L550 90l180 140 250-110 220 180 240-50v170H0z" fill="currentColor" fill-opacity="0.08"/>
+      <path d="M0 320L220 180l80 60L520 120l200 160 220-130 200 160 200-70v130H0z" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.25"/>
+      <g stroke="currentColor" stroke-opacity=".4" stroke-width="2" fill="none">
+        <path d="M150 320v-50M140 290l10-15 10 15M140 275l10-15 10 15M145 260l5-15 5 15"/>
+        <path d="M180 320v-60M168 285l12-18 12 18M170 268l10-18 10 18M173 250l7-15 7 15"/>
+        <path d="M1250 320v-50M1240 290l10-15 10 15M1240 275l10-15 10 15M1245 260l5-15 5 15"/>
+      </g>
+      <g transform="translate(800 120)" stroke="currentColor" stroke-width="2" stroke-opacity="0.4" fill="none">
+        <path d="M-200 20 L200 -80" stroke-dasharray="8 4"/>
+        <rect x="0" y="-30" width="30" height="20" rx="4" fill="currentColor" fill-opacity="0.2"/>
+        <path d="M15 -30 V-50 M5 -50 h20" />
+      </g>
+    </g>
+
+    <!-- 7. Valiasr (درختان چنار بلند متوالی) -->
+    <g class="deco-valiasr">
+      <path d="M0 320h1440v-20H0z" fill="currentColor" fill-opacity="0.05"/>
+      <!-- ردیف درختان -->
+      <g stroke="currentColor" stroke-opacity="0.3" stroke-width="3" fill="currentColor" fill-opacity="0.1">
+        <!-- درخت ۱ -->
+        <path d="M100 320v-120 M70 200q30-100 60 0q-30 20-60 0"/>
+        <path d="M250 320v-160 M210 160q40-120 80 0q-40 20-80 0"/>
+        <path d="M400 320v-130 M370 190q30-100 60 0q-30 20-60 0"/>
+        <path d="M550 320v-180 M510 140q40-130 80 0q-40 20-80 0"/>
+        <path d="M700 320v-150 M660 170q40-110 80 0q-40 20-80 0"/>
+        <path d="M850 320v-170 M810 150q40-120 80 0q-40 20-80 0"/>
+        <path d="M1000 320v-120 M970 200q30-100 60 0q-30 20-60 0"/>
+        <path d="M1150 320v-160 M1110 160q40-120 80 0q-40 20-80 0"/>
+        <path d="M1300 320v-140 M1270 180q30-100 60 0q-30 20-60 0"/>
+      </g>
+      <!-- جوی آب -->
+      <path d="M0 310h1440 M0 315h1440" stroke="currentColor" stroke-opacity="0.1" stroke-width="2"/>
+    </g>
+
+    <!-- 8. Bazaar (طاق‌های بازاری، گنبد) -->
+    <g class="deco-bazaar">
+      <g fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="2" stroke-opacity="0.2">
+        <path d="M50 320V200q75-100 150 0v120z"/>
+        <path d="M350 320V180q85-120 170 0v140z"/>
+        <path d="M650 320V220q65-90 130 0v100z"/>
+        <path d="M900 320V150q100-140 200 0v170z"/>
+        <path d="M1200 320V240q50-70 100 0v80z"/>
+      </g>
+      <!-- گنبد -->
+      <path d="M435 180 q85-100 170 0" fill="none" stroke="currentColor" stroke-width="3" stroke-opacity="0.25"/>
+      <path d="M950 150 q50-80 100 0" fill="none" stroke="currentColor" stroke-width="3" stroke-opacity="0.25"/>
+      <g stroke="currentColor" stroke-width="2" stroke-opacity="0.4" fill="none">
+        <path d="M125 0v80 M115 80h20l-10 20z"/>
+        <path d="M435 0v60 M425 60h20l-10 20z"/>
+        <path d="M1000 0v100 M985 100h30l-15 30z"/>
+      </g>
+    </g>
+
+    <!-- 9. Chitgar (دریاچه چیتگر، چرخ و فلک و درخت) -->
+    <g class="deco-chitgar">
+      <!-- چرخ و فلک -->
+      <g transform="translate(250 140)" stroke="currentColor" stroke-width="2" stroke-opacity="0.3" fill="none">
+        <circle cx="60" cy="60" r="50"/>
+        <circle cx="60" cy="60" r="40"/>
+        <path d="M60 10v100 M10 60h100 M25 25l70 70 M25 95l70-70"/>
+        <path d="M60 60L40 180h40z" fill="currentColor" fill-opacity="0.1"/>
+      </g>
+      <!-- موج دریاچه -->
+      <path d="M0 300q50-20 100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0" fill="none" stroke="currentColor" stroke-opacity="0.2" stroke-width="2"/>
+      <path d="M0 315q50-20 100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0t100 0" fill="none" stroke="currentColor" stroke-opacity="0.15" stroke-width="2"/>
+      <!-- درختان دور -->
+      <path d="M800 300v-40 M790 260q10-30 20 0 M900 300v-50 M890 250q10-40 20 0 M1100 300v-30 M1090 270q10-20 20 0 M1250 300v-60 M1240 240q10-40 20 0" stroke="currentColor" stroke-opacity="0.3" stroke-width="2" fill="currentColor" fill-opacity="0.1"/>
+    </g>
+
+    <!-- 10. Tajrish (گنبد امامزاده، سقف بازار، کوه در پس‌زمینه) -->
+    <g class="deco-tajrish">
+      <path d="M0 320L300 200l200 120L900 150l300 170" fill="none" stroke="currentColor" stroke-opacity="0.1" stroke-width="2"/>
+      <g fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.2" stroke-width="2">
+        <path d="M400 320v-80 q40-60 80 0 v80z"/> <!-- گنبد -->
+        <path d="M370 320v-100h20v100 M490 320v-100h20v100"/> <!-- گلدسته‌ها -->
+      </g>
+      <path d="M700 320v-60l40-30l40 30v60z M800 320v-50l30-20l30 20v50z" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.15" stroke-width="2"/>
+      <g stroke="currentColor" stroke-opacity="0.3" stroke-width="2" fill="none">
+        <path d="M150 320v-80 M130 240q20-60 40 0" fill="currentColor" fill-opacity="0.05"/>
+        <path d="M1100 320v-100 M1070 220q30-80 60 0" fill="currentColor" fill-opacity="0.05"/>
+      </g>
+    </g>
+
+    <!-- 11. Darband (صخره‌ها، پله‌ها، چتر کافه‌ها) -->
+    <g class="deco-darband">
+      <path d="M0 320L100 150L250 320 M200 320l150-200l200 200 M500 320l200-250l250 250 M850 320l150-150l150 150" fill="none" stroke="currentColor" stroke-opacity="0.2" stroke-width="3"/>
+      <!-- پله‌ها -->
+      <path d="M300 320h20v-10h20v-10h20v-10h20v-10h20v-10h20v-10h20v-10" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+      <path d="M750 320h-20v-10h-20v-10h-20v-10h-20v-10" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+      <!-- چتر کافه‌ها -->
+      <g fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.3" stroke-width="2">
+        <path d="M380 260 q20-20 40 0z M400 260v20"/>
+        <path d="M450 230 q20-20 40 0z M470 230v20"/>
+        <path d="M700 270 q20-20 40 0z M720 270v20"/>
+      </g>
+    </g>
+
+    <!-- 12. Yassaei Logo (آذرخش و مسیرهای مدار چاپی) -->
+    <g class="deco-logo">
+      <path d="M1080 38 1004 164h52l-34 116 118-164h-58z" fill="currentColor" fill-opacity=".11" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/>
+      <path d="M1117 116h96v34h76M1117 116v-42h-70M1125 178h132v42h71M1000 222h-82v-46h-96" fill="none" stroke="#60a5fa" stroke-opacity=".42" stroke-width="2"/>
+      <path d="M918 176h-54v-30h-74M1254 220v42h-84M1047 74h-50v-28h-82" fill="none" stroke="#93c5fd" stroke-opacity=".28" stroke-width="1.6"/>
+      <g fill="#60a5fa" fill-opacity=".62">
+        <circle cx="790" cy="146" r="4"/><circle cx="864" cy="176" r="4"/><circle cx="1000" cy="222" r="4"/><circle cx="1047" cy="74" r="4"/><circle cx="1213" cy="116" r="4"/><circle cx="1328" cy="220" r="4"/>
+      </g>
+      <g fill="none" stroke="currentColor" stroke-opacity=".22" stroke-width="1.5">
+        <path d="M730 292h120v-28h78v28h96"/><path d="M1220 286h110v-28h76"/>
+      </g>
+    </g>
+
+  </svg>
+</div>
+
+<!-- نوار بالایی: اعلان‌ها و اطلاعات سریع -->
+<div class="topbar" id="topbar" hidden>
+  <div class="wrap topbar-inner">
+    <div class="ticker" id="ticker" aria-live="polite"></div>
+    <div class="topbar-meta">
+      <div class="tb-clock" id="tbClock" title="ساعت و تقویم رسمی ایران">
+        <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-clock"/></svg>
+        <span id="tbClockDate"></span>
+        <span class="tb-clock-sep">·</span>
+        <span id="tbClockTime" class="mono b"></span>
+      </div>
+      <span class="tb-sep"></span>
+      <a href="#/pages/contact" class="tb-link" id="tb-phone"></a>
+      <span class="tb-sep"></span>
+      <span class="tb-text" data-i18n="topbar.fastSend">ارسال از تهران به سراسر ایران</span>
+    </div>
+  </div>
+</div>
+
+<!-- سربرگ -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-grid" id="headerGrid" data-search-position="center" data-header-layout="split">
+    <a class="brand" href="#/" id="brandLink" aria-label="یاسایی — صفحهٔ اصلی">
+      <span class="brand-logo" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" class="lg-a" stop-color="#3dabff"/><stop offset="1" class="lg-b" stop-color="#1e8ae8"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="46" height="46" rx="13" fill="url(#g)"/>
+  <path d="M18 10v4M24 10v4M30 10v4M18 34v4M24 34v4M30 34v4M10 18h4M10 24h4M10 30h4M34 18h4M34 24h4M34 30h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <rect x="14" y="14" width="20" height="20" rx="4.5" fill="#fff"/>
+  <path d="M25.5 18.5 20 26h3.6l-1.6 5.5L28 24h-3.6z" class="lg-bolt" fill="#1e8ae8"/></svg>
+      </span>
+      <span class="brand-text">
+        <span class="brand-name" id="brandName">یاسایی</span>
+        <span class="brand-tag" id="brandTag">لوازم الکترونیک و الکتریکی</span>
+      </span>
+    </a>
+
+    <div class="search-slot" id="searchSlot">
+      <form class="searchbox" id="searchForm" role="search" autocomplete="off">
+        <svg viewBox="0 0 24 24" class="ic sb-icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="searchInput" class="sb-input" type="search" name="q" data-i18n-placeholder="search.placeholder" placeholder="جست‌وجوی کالا، برند یا دسته…" aria-label="جست‌وجو">
+        <button type="button" class="sb-btn" id="btnVoiceSearch" data-i18n-title="search.voice" title="جست‌وجوی صوتی" aria-label="جست‌وجوی صوتی"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-mic"/></svg></button>
+        <button type="button" class="sb-btn" id="btnImageSearch" data-i18n-title="search.byImage" title="جست‌وجو با عکس" aria-label="جست‌وجو با عکس"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-camera"/></svg></button>
+        <button type="submit" class="sb-submit" data-i18n="search.go">جست‌وجو</button>
+        <div class="suggest" id="suggestBox" hidden></div>
+      </form>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="btnFullscreen" title="تمام‌صفحه" aria-label="تمام‌صفحه"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-maximize"/></svg></button>
+      <button class="icon-btn" id="btnRefresh" title="تازه‌سازی صفحه" aria-label="تازه‌سازی صفحه" data-i18n-title="hdr.refresh"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+      <button class="icon-btn" id="btnTheme" data-i18n-title="theme.toggle" title="تغییر پوسته" aria-label="تغییر پوسته"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <button class="icon-btn" id="btnLang" title="English / فارسی" aria-label="تغییر زبان"><span class="lang-chip" id="langChip">EN</span></button>
+      <a class="icon-btn has-badge" href="#/account/notifications" id="btnNotif" data-i18n-title="nav.notifications" title="اعلان‌ها" aria-label="اعلان‌ها"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge" id="notifBadge" hidden>0</span></a>
+      <a class="icon-btn has-badge" href="#/account/wishlist" id="btnWish" data-i18n-title="nav.wishlist" title="لیست من" aria-label="لیست من"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-heart"/></svg><span class="badge" id="wishBadge" hidden>0</span></a>
+      <a class="icon-btn has-badge" href="#/compare" id="btnCompare" data-i18n-title="compare.title" title="مقایسه کالاها" aria-label="مقایسه کالاها"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-scale"/></svg><span class="badge" id="compareBadge" hidden>0</span></a>
+      <a class="icon-btn has-badge" href="#/cart" id="btnCart" data-i18n-title="nav.cart" title="سبد خرید" aria-label="سبد خرید"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-cart"/></svg><span class="badge" id="cartBadge" hidden>0</span></a>
+      <a class="btn btn-primary btn-sm" href="#/auth" id="btnAuth"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-user"/></svg><span data-i18n="nav.login">ورود</span></a>
+      <div class="user-menu" id="userMenu" hidden></div>
+      <button class="icon-btn only-mobile" id="btnMenu" aria-label="منو" data-i18n-title="nav.menu"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+
+  <nav class="mainnav" id="mainNav" aria-label="دسته‌بندی‌ها">
+    <div class="wrap nav-inner" id="navInner"></div>
+  </nav>
+</header>
+
+<!-- محتوای اصلی -->
+<main id="view" class="main" tabindex="-1">
+  <div class="wrap" id="viewInner">
+    <div class="boot-splash" id="bootSplash">
+      <div class="splash-logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="64" height="64"><defs><linearGradient id="splg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3dabff"/><stop offset="1" stop-color="#1e8ae8"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="13" fill="url(#splg)"/><path d="M18 10v4M24 10v4M30 10v4M18 34v4M24 34v4M30 34v4M10 18h4M10 24h4M10 30h4M34 18h4M34 24h4M34 30h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/><rect x="14" y="14" width="20" height="20" rx="4.5" fill="#fff"/><path d="M25.5 18.5 20 26h3.6l-1.6 5.5L28 24h-3.6z" fill="#1e8ae8"/></svg>
+      </div>
+      <div class="splash-bar"><span></span></div>
+      <p class="splash-text" data-i18n="boot.loading">در حال بارگذاری یاسایی…</p>
+      <p class="splash-slow" data-i18n="boot.waking">سرور ابری در حال بیدارشدن است؛ چند ثانیهٔ دیگر خودکار دوباره تلاش می‌کنیم…</p>
+    </div>
+  </div>
+</main>
+
+<noscript>
+  <style>#welcomeScreen{display:none}</style>
+  <div class="wrap"><div class="notice notice-warn">برای استفاده از فروشگاه، جاوااسکریپت مرورگر خود را فعال کنید. می‌توانید برای خرید حضوری با شمارهٔ ۰۷۷۳۳۳۳۴۴۵۵ تماس بگیرید.</div></div>
+</noscript>
+
+<!-- پانویس -->
+<footer class="site-footer" id="siteFooter">
+  <div class="wrap footer-grid">
+    <section class="f-col f-about">
+      <div class="f-brand">
+        <!-- لوگوی پیش‌فرض پانویس: نشان باکیفیت یاسایی — در صورت ست‌کردن footerLogo از پنل ادمین، جاگزین می‌شود -->
+        <span class="f-logo" id="fLogoBox"><img src="/assets/img/yassaei-poster-badge.svg" alt="نشان یاسایی" width="34" height="34" decoding="async"></span>
+        <strong id="fBrandName">یاسایی</strong>
+      </div>
+      <p class="f-desc" id="fDesc">فروشگاه تخصصی لوازم الکترونیک و الکتریکی در تهران تهران، با ضمانت اصالت کالا و ارسال به سراسر ایران.</p>
+      <div class="f-badges" id="fBadges"></div>
+      <div class="f-social" id="fSocial"></div>
+    </section>
+    <section class="f-col">
+      <h4 data-i18n="footer.shopping">خرید</h4>
+      <ul>
+        <li><a href="#/products" data-i18n="footer.allProducts">همهٔ محصولات</a></li>
+        <li><a href="#/products?discount=1" data-i18n="footer.deals">تخفیف‌ها و پیشنهادها</a></li>
+        <li><a href="#/products?inStock=1" data-i18n="footer.inStock">کالاهای موجود</a></li>
+        <li><a href="#/search" data-i18n="footer.searchByImage">جست‌وجوی تصویری</a></li>
+        <li><a href="#/account/wishlist" data-i18n="footer.myList">لیست من</a></li>
+        <li><a href="#/stats" data-i18n="footer.stats">آمار فروشگاه</a></li>
+      </ul>
+    </section>
+    <section class="f-col">
+      <h4 data-i18n="footer.services">خدمات مشتریان</h4>
+      <ul>
+        <li><a href="#/pages/guide" data-i18n="footer.guide">راهنمای خرید</a></li>
+        <li><a href="#/pages/service" data-i18n="footer.service">خدمات مشتریان</a></li>
+        <li><a href="#/pages/faq" data-i18n="footer.faq">سؤالات متداول</a></li>
+        <li><a href="#/pages/insurance" data-i18n="footer.insurance">بیمهٔ مرسوله</a></li>
+        <li><a href="#/account/plus" data-i18n="footer.plus">اشتراک پلاس</a></li>
+        <li><a href="#/account/tickets" data-i18n="footer.tickets">تیکت پشتیبانی</a></li>
+      </ul>
+    </section>
+    <section class="f-col">
+      <h4 data-i18n="footer.about">درباره و قوانین</h4>
+      <ul>
+        <li><a href="#/pages/about" data-i18n="footer.aboutUs">دربارهٔ ما</a></li>
+        <li><a href="#/pages/terms" data-i18n="footer.terms">قوانین و مقررات</a></li>
+        <li><a href="#/pages/privacy" data-i18n="footer.privacy">حریم خصوصی</a></li>
+        <li><button type="button" class="link-btn" data-act="consent-manage" data-i18n="consent.manage">مدیریت توافق کوکی و حریم خصوصی</button></li>
+        <li><button type="button" class="link-btn" data-act="sys-cache-repair" data-i18n="sys.cacheRepair">رفع خطای سایت (حذف کش)</button></li>
+        <li><a href="#/pages/bugReport" data-i18n="footer.bug">گزارش خطا</a></li>
+        <li><a href="#/pages/contact" data-i18n="footer.contact">تماس با ما</a></li>
+        <li><a href="#/account/feedback" data-i18n="footer.suggest">پیشنهادها و شکایات</a></li>
+      </ul>
+    </section>
+    <section class="f-col f-contact">
+      <h4 data-i18n="footer.contactUs">راه‌های ارتباطی</h4>
+      <ul class="contact-list" id="fContact"></ul>
+      <div class="f-map">
+        <a href="#/pages/contact" class="minimap-link" id="fMinimap" aria-label="کروکی محل فروشگاه"></a>
+      </div>
+    </section>
+  </div>
+  <div class="footer-bottom">
+    <div class="wrap fb-inner">
+      <p id="fCopy">© <span id="fYear"></span> یاسایی — همهٔ حقوق محفوظ است.</p>
+      <div class="fb-links">
+        <button class="link-btn" id="btnInstallApp" hidden><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="footer.install">نصب اپلیکیشن</span></button>
+        <button class="link-btn" id="btnSupportTop"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-headset"/></svg><span data-i18n="footer.support">پشتیبانی آنلاین</span></button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- نوار ناوبری موبایل -->
+<nav class="mobile-nav" id="mobileNav" aria-label="ناوبری موبایل">
+  <a href="#/" data-mn="home"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-home"/></svg><span data-i18n="mnav.home">خانه</span></a>
+  <a href="#/products" data-mn="cats"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-grid"/></svg><span data-i18n="mnav.products">دسته‌ها</span></a>
+  <a href="#/search" data-mn="search"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-search"/></svg><span data-i18n="mnav.search">جست‌وجو</span></a>
+  <a href="#/cart" data-mn="cart"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-cart"/></svg><span data-i18n="mnav.cart">سبد</span><b class="mn-badge" id="mnCart" hidden>0</b></a>
+  <a href="#/account" data-mn="me"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-user"/></svg><span data-i18n="mnav.me">حساب من</span></a>
+</nav>
+
+<!-- ابزارهای شناور -->
+<button class="fab fab-support" id="fabSupport" title="پشتیبانی آنلاین" aria-label="پشتیبانی آنلاین">
+  <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-headset"/></svg>
+</button>
+<button class="fab fab-top" id="fabTop" hidden data-i18n-title="common.scrollTop" title="بازگشت به بالا" aria-label="بازگشت به بالا">
+  <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg>
+</button>
+<button class="fab fab-bottom" id="fabBottom" hidden data-i18n-title="common.scrollBottom" title="پایین رفتن آرام" aria-label="پایین رفتن آرام">
+  <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><use href="#i-arrow-down"/></svg>
+</button>
+
+<!-- پنل‌های کشویی، مودال‌ها، اعلان‌ها -->
+<div id="drawerRoot"></div>
+<div id="modalRoot"></div>
+<div id="toastRoot" class="toast-root" role="status" aria-live="polite"></div>
+<div id="chatRoot"></div>
+<div id="paletteRoot"></div>
+
+<!-- اسپرایت آیکون‌ها -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+<defs>
+<g id="i-chip"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 4v3M12 4v3M15 4v3M9 17v3M12 17v3M15 17v3M4 9h3M4 12h3M4 15h3M17 9h3M17 12h3M17 15h3"/></g>
+<g id="i-solder"><path d="M3 21l6-6"/><path d="M9 15l4-4 3 3-4 4z"/><path d="M16 8l2-2a2 2 0 0 1 3 3l-2 2"/><path d="M14 6l4 4"/></g>
+<g id="i-wrench"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-2.1z"/></g>
+<g id="i-fan"><circle cx="12" cy="12" r="2"/><path d="M12 10c0-3 1-5 3.5-5S19 8 16 10"/><path d="M14 13c2.6 1.5 3.6 3.3 2.4 5.4S11 20 12 16"/><path d="M10 13c-2.6 1.5-4.6 1.5-5.8-.6S6 7 8 10"/></g>
+<g id="i-tv"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="m8 3 4 4 4-4"/></g>
+<g id="i-keyboard"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M18 14h.01M9 14h6"/></g>
+
+<g id="i-home"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></g>
+<g id="i-search"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></g>
+<g id="i-refresh"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></g>
+<g id="i-cart"><path d="M3 4h2.2l2.2 11h10L20 7H6"/><circle cx="9.5" cy="19" r="1.6"/><circle cx="17.5" cy="19" r="1.6"/></g>
+<g id="i-user"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-3.6 4-5.4 7.5-5.4s6.3 1.8 7.5 5.4"/></g>
+<g id="i-users"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 19.5c1-3.2 3.4-4.8 6.5-4.8s5.5 1.6 6.5 4.8"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6"/><path d="M18 14.9c2.1.5 3.4 2 4 4.6"/></g>
+<g id="i-heart"><path d="M12 20s-7.5-4.6-7.5-9.4A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3c0 4.8-7.5 9.4-7.5 9.4Z"/></g>
+<g id="i-bell"><path d="M6 16V10a6 6 0 1 1 12 0v6l1.6 2.4H4.4Z"/><path d="M10 21h4"/></g>
+<g id="i-moon"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></g>
+<g id="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></g>
+<g id="i-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></g>
+<g id="i-minimize"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></g>
+<g id="i-menu"><path d="M4 7h16M4 12h16M4 17h16"/></g>
+<g id="i-close"><path d="m6 6 12 12M18 6 6 18"/></g>
+<g id="i-check"><path d="m5 13 4.5 4.5L19 7"/></g>
+<g id="i-plus"><path d="M12 5v14M5 12h14"/></g>
+<g id="i-volume"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.8a7.6 7.6 0 0 1 0 10.4"/></g>
+<g id="i-volume-off"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M16 10l4 4M20 10l-4 4"/></g>
+<g id="i-terminal"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M7 9.5l3 2.5-3 2.5M12.5 15h4.5"/></g>
+<g id="i-send"><path d="M20 4 3.5 10.5l6.5 2.5 2.5 6.5z"/><path d="M20 4 10 13"/></g>
+<g id="i-gift2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M4 10h16M12 10v10M12 10c-4 0-5.5-2-5.5-3.5S8 4 9.5 5 12 10 12 10zm0 0c4 0 5.5-2 5.5-3.5S16 4 14.5 5 12 10 12 10z"/></g>
+<g id="i-play"><path d="M8 5.5v13l11-6.5z"/></g>
+<g id="i-video"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3z"/></g>
+<g id="i-minus"><path d="M5 12h14"/></g>
+<g id="i-chevron-down"><path d="m6 9 6 6 6-6"/></g>
+<g id="i-chevron-left"><path d="m15 6-6 6 6 6"/></g>
+<g id="i-chevron-right"><path d="m9 6 6 6-6 6"/></g>
+<g id="i-arrow-up"><path d="M12 20V5M6 11l6-6 6 6"/></g>
+<g id="i-arrow-down"><path d="M12 4v15M6 13l6 6 6-6"/></g>
+<g id="i-arrow-left"><path d="M20 12H4M10 6l-6 6 6 6"/></g>
+<g id="i-trash"><path d="M4 7h16M9 7V5h6v2M6.5 7l1 13h9l1-13"/></g>
+<g id="i-edit"><path d="M4 20h4L20 8l-4-4L4 16Z"/><path d="m14.5 5.5 4 4"/></g>
+<g id="i-filter"><path d="M4 6h16M7 12h10M10 18h4"/></g>
+<g id="i-grid"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></g>
+<g id="i-layout"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></g>
+<g id="i-list"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="2.2" cy="6" r=".8"/><circle cx="2.2" cy="12" r=".8"/><circle cx="2.2" cy="18" r=".8"/></g>
+<g id="i-star"><path d="m12 4 2.4 5 5.6.8-4 3.9 1 5.5-5-2.7-5 2.7 1-5.5-4-3.9 5.6-.8Z"/></g>
+<g id="i-info"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 8h.01"/></g>
+<g id="i-alert"><path d="M12 4 21 19H3Z"/><path d="M12 10v4M12 17h.01"/></g>
+<g id="i-shield"><path d="M12 3.5 19 6v6c0 4.2-3 7.2-7 8.5-4-1.3-7-4.3-7-8.5V6Z"/><path d="m9 12 2 2 4-4"/></g>
+<!-- سپرِ تیک‌دار (احراز هویت تأییدشده) و سپرِ هشدار (احراز هویت ناقص) -->
+<g id="i-shield-check"><path d="M12 3.5 19 6v6c0 4.2-3 7.2-7 8.5-4-1.3-7-4.3-7-8.5V6Z"/><path d="m9 12 2 2 4-4"/></g>
+<g id="i-shield-alert"><path d="M12 3.5 19 6v6c0 4.2-3 7.2-7 8.5-4-1.3-7-4.3-7-8.5V6Z"/><path d="M12 9v3.6M12 15.4h.01"/></g>
+<g id="i-truck"><path d="M3 7h10v9H3Z"/><path d="M13 10h4l3 3v3h-7Z"/><circle cx="7" cy="18" r="1.7"/><circle cx="17" cy="18" r="1.7"/></g>
+<g id="i-box"><path d="m12 3 8 4.2v9.6L12 21l-8-4.2V7.2Z"/><path d="M4 7.2 12 11.4l8-4.2M12 11.4V21"/></g>
+<g id="i-wallet"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M16 12.5h2.5"/><path d="M3 9.5h13"/></g>
+<g id="i-dollar"><circle cx="12" cy="12" r="9"/><path d="M12 6.6v10.8"/><path d="M14.6 9.1c-.5-.9-1.4-1.4-2.6-1.4-1.5 0-2.7.8-2.7 2.1 0 2.8 5.6 1.5 5.6 4.3 0 1.3-1.2 2.2-2.9 2.2-1.4 0-2.4-.6-2.9-1.5"/></g>
+<g id="i-ticket"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1a2.5 2.5 0 0 0 0 5v1A2.5 2.5 0 0 1 17.5 18h-11A2.5 2.5 0 0 1 4 15.5v-1a2.5 2.5 0 0 0 0-5Z"/><path d="M13 8v8"/></g>
+<g id="i-chat"><path d="M20 12a7 7 0 0 1-7 7H8l-4 3 1-4.2A7 7 0 0 1 13 5a7 7 0 0 1 7 7Z"/></g>
+<g id="i-headset"><path d="M5 14v-2a7 7 0 0 1 14 0v2"/><rect x="3" y="13" width="4" height="6" rx="2"/><rect x="17" y="13" width="4" height="6" rx="2"/><path d="M19 19c0 1.6-2 2.5-4 2.5"/></g>
+<g id="i-camera"><path d="M4 8.5h3l1.6-2.2h6.8L17 8.5h3v10H4Z"/><circle cx="12" cy="13" r="3.2"/></g>
+<g id="i-image"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m5 17 4.5-4.5L14 17l2.5-2.5L20 18"/></g>
+<g id="i-mic"><rect x="9.5" y="3" width="5" height="10" rx="2.5"/><path d="M6 12a6 6 0 0 0 12 0M12 18v3"/></g>
+<g id="i-barcode"><path d="M4 6v12M7 6v12M10 6v8M13 6v12M16 6v8M19 6v12"/></g>
+<g id="i-scan"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><path d="M4 12h16"/></g>
+<g id="i-printer"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="2"/><path d="M7 16h10v4H7Z"/></g>
+<g id="i-chart"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></g>
+<g id="i-settings"><circle cx="12" cy="12" r="3"/><path d="M19.4 14a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1v.3a2 2 0 1 1-4 0v-.2a1.6 1.6 0 0 0-2.8-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 13H3.4a2 2 0 1 1 0-4h.2A1.6 1.6 0 0 0 4.7 6.2l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 2.4V2.2a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.3a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.3.9Z"/></g>
+<g id="i-logout"><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M10 8 6 12l4 4M6 12h9"/></g>
+<g id="i-award"><circle cx="12" cy="9" r="5.5"/><path d="M9 13.5 7.5 21l4.5-2.4L16.5 21 15 13.5"/><path d="M12 6.8l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 8.9l2-.3z"/></g>
+<g id="i-lock"><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 1 1 7 0v2.5"/></g>
+<g id="i-key"><circle cx="8" cy="14" r="4"/><path d="m11 11 8-8 2 2-2 2 2 2-2.5 2.5-2-2-2 2"/></g>
+<g id="i-mail"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7 8 6 8-6"/></g>
+<g id="i-phone"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z"/></g>
+<g id="i-map"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6Z"/><path d="M9 4v14M15 6v14"/></g>
+<g id="i-pin"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></g>
+<g id="i-clock"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g>
+<g id="i-gift"><rect x="3.5" y="9" width="17" height="11" rx="2"/><path d="M3.5 13h17M12 9v11"/><path d="M12 9S9.5 4 7.5 5.5 9 9 12 9Zm0 0s2.5-5 4.5-3.5S15 9 12 9Z"/></g>
+<g id="i-zap"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12Z"/></g>
+<g id="i-tag"><path d="M11.5 3H21v9.5L11 22 2 12.5Z"/><circle cx="16.5" cy="7.5" r="1.6"/></g>
+<g id="i-percent"><path d="M19 5 5 19"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></g>
+<g id="i-eye"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="3"/></g>
+<g id="i-layers"><path d="m12 3 9 5-9 5-9-5Z"/><path d="m3.5 12.5 8.5 4.7 8.5-4.7M3.5 16.8 12 21.5l8.5-4.7"/></g>
+<g id="i-download"><path d="M12 4v11M7.5 11 12 15.5 16.5 11"/><path d="M4.5 19h15"/></g>
+<g id="i-upload"><path d="M12 20V9M7.5 13 12 8.5 16.5 13"/><path d="M4.5 5h15"/></g>
+<g id="i-refresh"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4.5h-4.5"/></g>
+<g id="i-file"><path d="M6 3h7l5 5v13H6Z"/><path d="M13 3v5h5"/><path d="M9 13h6M9 17h4"/></g>
+<g id="i-bug"><path d="M8 8a4 4 0 0 1 8 0v5a4 4 0 0 1-8 0Z"/><path d="M8 10H4M20 10h-4M8 14H4.5M19.5 14H16M9 5 7 3M15 5l2-2M12 17v4"/></g>
+<g id="i-flag"><path d="M6 21V4h11l-1.5 4L17 12H6"/></g>
+<g id="i-send"><path d="M4 12 20 5l-6 15-2.5-6Z"/><path d="m11.5 14 8.5-9"/></g>
+<g id="i-card"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M6.5 15h3"/></g>
+<g id="i-calendar"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3.5v3M16 3.5v3"/></g>
+<g id="i-store"><path d="M4 9.5h16V20H4Z"/><path d="M3 9.5 5 4h14l2 5.5"/><path d="M9.5 20v-5h5v5"/></g>
+<g id="i-sparkles"><path d="M12 3.5 13.6 8 18 9.6 13.6 11.2 12 15.7 10.4 11.2 6 9.6 10.4 8Z"/><path d="M18.5 15.5 19.3 18l2.2.8-2.2.9-.8 2.3-.8-2.3-2.2-.9 2.2-.8Z"/></g>
+<g id="i-anchor"><circle cx="12" cy="5.5" r="2"/><path d="M12 7.5V21M8 21c-3 0-4-3-4-5M16 21c3 0 4-3 4-5M7 12h10"/></g>
+<g id="i-wave"><path d="M2 9c2.5 0 2.5 2.5 5 2.5S9.5 9 12 9s2.5 2.5 5 2.5S19.5 9 22 9"/><path d="M2 15c2.5 0 2.5 2.5 5 2.5s2.5-2.5 5-2.5 2.5 2.5 5 2.5 2.5-2.5 5-2.5"/></g>
+<g id="i-palm"><path d="M12 21c0-6 1-10 3-13"/><path d="M15 8c-3-2-6-1-7.5 1M15 8c2.5-2.5 6-1.5 7 .5M15 8c-.5-3 1.5-5 4-5.5M15 8c-2-2-5.5-1.5-7 .5"/></g>
+<g id="i-battery"><rect x="3" y="8" width="15" height="9" rx="2.5"/><path d="M20.5 11.5v2"/><path d="M6 11h5v3H6Z"/></g>
+<g id="i-cable"><path d="M5 4v5a4 4 0 0 0 4 4h6a4 4 0 0 1 4 4v3"/><rect x="3" y="2" width="4" height="3" rx="1"/><rect x="17" y="19" width="4" height="3" rx="1"/></g>
+<g id="i-plug"><path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-6 6 6 6 0 0 1-6-6Z"/><path d="M12 17v4"/></g>
+<g id="i-watch"><rect x="7" y="7" width="10" height="11" rx="3"/><path d="M9.5 7V4h5v3M9.5 18v3h5v-3"/><path d="M12 10.5V13l1.6 1"/></g>
+<g id="i-glasses"><circle cx="6.5" cy="14" r="3.5"/><circle cx="17.5" cy="14" r="3.5"/><path d="M10 14h4M3 11 6 7M21 11 18 7"/></g>
+<g id="i-speaker"><rect x="6" y="3" width="12" height="18" rx="3"/><circle cx="12" cy="9" r="2.5"/><circle cx="12" cy="16" r="1.5"/></g>
+<g id="i-light"><path d="M9 3h6l1.5 6h-9Z"/><rect x="9.5" y="9" width="5" height="12" rx="2"/><path d="M12 1v2"/></g>
+<g id="i-qr"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><path d="M13.5 13.5h3v3h-3ZM18 18h2.5v2.5H18ZM13.5 20.5h3"/></g>
+<g id="i-sort"><path d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"/></g>
+<g id="i-copy"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></g>
+<g id="i-share"><circle cx="6" cy="12" r="2.5"/><circle cx="17.5" cy="6" r="2.5"/><circle cx="17.5" cy="18" r="2.5"/><path d="m8.3 10.8 7-3.6M8.3 13.2l7 3.6"/></g>
+<g id="i-external"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5.5A1.5 1.5 0 0 1 16.5 21h-11A1.5 1.5 0 0 1 4 19.5v-11A1.5 1.5 0 0 1 5.5 7H10"/></g>
+<g id="i-save"><path d="M5 4h11l3 3v13H5Z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></g>
+<g id="i-history"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v4.5H8"/><path d="M12 7.5V12l3 1.8"/></g>
+<g id="i-package-check"><path d="m12 3 8 4.2v9.6L12 21l-8-4.2V7.2Z"/><path d="m8.8 12 2.2 2.2 4.2-4.2"/></g>
+<g id="i-compare"><path d="M7 4v13M7 4 4 7.5M7 4l3 3.5"/><path d="M17 20V7M17 20l-3-3.5M17 20l3-3.5"/></g>
+<g id="i-help"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.6c-.8.4-1 1-1 1.8"/><path d="M12 17h.01"/></g>
+<g id="i-scale"><path d="M12 4v16M6 8h12"/><path d="M6 8 3 15h6ZM18 8l-3 7h6Z"/></g>
+<g id="i-globe"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.4 3.8 5.4 3.8 8.5S14.5 18.1 12 20.5c-2.5-2.4-3.8-5.4-3.8-8.5S9.5 5.9 12 3.5Z"/></g>
+<g id="i-eye-off"><path d="M4 4l16 16"/><path d="M9.9 5.2A9.7 9.7 0 0 1 12 5c6 0 9.5 6 9.5 6a17 17 0 0 1-3.2 3.9M6.4 7.9A16.6 16.6 0 0 0 2.5 11S6 17 12 17a9.6 9.6 0 0 0 3.4-.6"/></g>
+<g id="i-check-circle"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.4"/></g>
+<g id="i-x-circle"><circle cx="12" cy="12" r="9"/><path d="m9.2 9.2 5.6 5.6M14.8 9.2-5.6 5.6"/></g>
+<g id="i-dots"><circle cx="5.5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18.5" cy="12" r="1.4"/></g>
+<g id="i-arrow-right"><path d="M4 12h15"/><path d="m13.5 6.5 5.5 5.5-5.5 5.5"/></g>
+</defs>
+</svg>
+
+<script type="module" src="/bundle/main.js?v=ys-v130"></script>
+<script id="failsafe-script">
+        setTimeout(function(){
+          var ws = document.getElementById('welcomeScreen');
+          if (ws) {
+             ws.style.opacity = '0';
+             setTimeout(function(){ ws.parentNode.removeChild(ws); }, 500);
+          }
+          var bs = document.getElementById('bootSplash');
+          if (bs && bs.innerHTML.indexOf('button') === -1) {
+             bs.innerHTML = '<div class="empty"><h4>خطا در بارگذاری</h4><p class="muted small">لطفاً اتصال اینترنت خود را بررسی کنید و یا کش مرورگر را پاک کنید.</p><button class="btn btn-primary mt" onclick="window.location.reload(true)">تلاش مجدد</button></div>';
+          }
+        }, 4000);
+      </script>
+</body>
+</html>
